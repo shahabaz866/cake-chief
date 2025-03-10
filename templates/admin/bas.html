@@ -1,0 +1,336 @@
+{% load static %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cake Chief Admin</title>
+    <link rel="icon" href="{% static 'admin_assets\img\Starlogo.png' %}">
+    <!-- Stylesheets -->
+    <style>
+        .description-cell {
+           
+            word-wrap: break-word; 
+            padding: 10px;         
+           
+            background-color: #f9f9f9; 
+        }
+        .toastify {
+            padding: 12px 20px;
+            color: white;
+            display: inline-block;
+            box-shadow: 0 3px 6px -1px rgba(0, 0, 0, 0.12);
+            background-color: #333;
+            position: fixed;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            max-width: calc(50% - 20px);
+            z-index: 2147483647;
+        }
+        
+        .toastify.on {
+            opacity: 1;
+        }
+        .header-left {
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            width: 100%; /* Ensure it takes full width */
+            height: 80px; /* Set a fixed height for the header */
+            background-color: #f8f8f8; /* Optional: Add a background color */
+        }
+    
+        /* Style for the Cake Chief heading */
+        .cake-chief-heading {
+            font-family: 'Poppins', sans-serif; /* Modern and clean font */
+            font-size: 26px; /* Large size for impact */
+            color: #1b2850;
+            font-weight: 700; /* Bold weight */
+            text-transform: uppercase; /* Uppercase for a strong look */
+            letter-spacing: 2px; /* Spacing between letters */
+            text-align: center; /* Center the text */
+            transition: transform 0.3s ease, color 0.3s ease; /* Smooth transitions */
+        }
+    
+        /* Add a glowing effect */
+        .cake-chief-heading::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(211, 60, 60, 0.3), transparent 70%); /* Glow effect */
+            transform: translate(-50%, -50%) scale(0); /* Start with no glow */
+            transition: transform 0.5s ease; /* Smooth glow animation */
+            z-index: -1; /* Place behind the text */
+        }
+    
+        /* Hover effect */
+        .cake-chief-heading:hover {
+            color: #1b2850;
+             /* Lighter shade of red on hover */
+            transform: scale(1.05); /* Slightly enlarge on hover */
+        }
+    
+        .cake-chief-heading:hover::before {
+            transform: translate(-50%, -50%) scale(1); /* Expand glow on hover */
+        }
+    
+        /* Add a subtle shadow for depth */
+        .cake-chief-heading {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        </style>
+    <link rel="icon" href="{% static 'admin_assets\img\Starlogo.png' %}">
+
+    <link rel="stylesheet" href="{% static 'admin_assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'admin_assets/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'admin_assets/plugins/select2/css/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'admin_assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'admin_assets/css/bootstrap-datetimepicker.min.css' %}">
+    <link rel="stylesheet" href="{% static 'admin_assets/css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'css/cropper.css' %}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+
+<body>
+    <div class="main-wrapper">
+
+        <div class="header">
+
+            <div class="header-left active">
+                <a href="{% url "dashboard" %}" class="logo">
+                    <h2 class="cake-chief-heading">Cake Chief</h2>                </a>
+                <a href="{% url 'dashboard' %}" class="logo-small">
+                    <img src="{% static 'admin_assets\img\logo\logo-small.png' %}" alt="">
+
+                </a>
+                
+                <a id="toggle_btn" href="javascript:void(0);">
+                </a> 
+            </div>
+
+            <a id="mobile_btn" class="mobile_btn" href="#sidebar">
+                <span class="bar-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </a>
+
+
+            <ul class="nav user-menu">
+
+
+                <li class="nav-item dropdown has-arrow main-drop">
+                    <a href="javascript:void(0);" class="dropdown-toggle nav-link userset" data-bs-toggle="dropdown">
+                        <span class="user-img"><img src="{% static 'admin_assets/img/profiles/avatoradmn.jpg' %}" alt="">
+                            <span class="status online"></span></span>
+                    </a>
+                    <div class="dropdown-menu menu-drop-user">
+                        <div class="profilename">
+                            <div class="profileset">
+                                <span class="user-img"><img src="{% static 'admin_assets/img/profiles/avatoradmn.jpg' %}" alt="">
+                                    <span class="status online"></span></span>
+                                <div class="profilesets">
+                                    <h6>shahabas</h6>
+                                    <h5>Admin</h5>
+                                </div>
+                            </div>
+                            <hr class="m-0">
+                            
+                            <hr class="m-0">
+                            <a class="dropdown-item logout pb-0" href="{% url "home:logout" %}"><img
+                                src="{% static 'admin_assets/img/icons/log-out.svg' %}" class="me-2" alt="img">Logout</a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+
+            <div class="dropdown mobile-user-menu">
+                <a href="javascript:void(0);" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+                    aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    
+                    <a class="dropdown-item" href="{% url "home:logout" %}">Logout</a>
+                    
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-inner slimscroll">
+                <div id="sidebar-menu" class="sidebar-menu">
+                    <ul>
+                        <li>
+                            <a href="{% url 'dashboard' %}"><img src="{% static 'admin_assets/img/icons/dashboard.svg' %}" alt="img">
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="submenu">
+                            <a href="javascript:void(0);">
+                                <img src="{% static 'admin_assets/img/icons/product.svg' %}" alt="img">
+                                <span>Product </span> <span class="menu-arrow"></span>
+                            </a>
+                            <ul class="submenu-content">
+                                <li><a href="{% url 'product_list' %}">Product List</a></li>
+                                <li><a href="{% url 'add_products' %}">Add Product</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="submenu">
+                            <a href="javascript:void(0);">
+                                <img src="{% static 'admin_assets/img/icons/category.svg' %}" alt="img">
+                                <span>Category </span> <span class="menu-arrow"></span>
+                            </a>
+                            <ul class="submenu-content">
+                                <li><a href="{% url 'category_list' %}">Category List</a></li>
+                                <li><a href="{% url 'add_category' %}">Add Category</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="submenu">
+                            <a href="javascript:void(0);">
+                                <img src="{% static 'admin_assets/img/icons/flavour.svg' %}" alt="img">
+                                <span>Flavour </span> <span class="menu-arrow"></span>
+                            </a>
+                            <ul class="submenu-content">
+                                <li><a href="{% url 'flavour_list' %}">Flavour List</a></li>
+                                <li><a href="{% url 'add_flavour' %}">Add Flavour</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="submenu">
+                            <a href="javascript:void(0);">
+                                <img src="{% static 'admin_assets/img/icons/coupon.svg' %}" alt="img">
+                                <span>Coupon </span> <span class="menu-arrow"></span>
+                            </a>
+                            <ul class="submenu-content">
+                                <li><a href="{% url 'coupon_list' %}">List Coupons</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li class="submenu">
+                            <a href="javascript:void(0);"><img src="{% static 'admin_assets/img/icons/users1.svg' %}" alt="img">
+                                <span>People</span><span class="menu-arrow"></span>
+                            </a>
+                            <ul class="submenu-content">
+                                <li><a href="{% url 'user_management' %}">User List</a></li>
+                            </ul>
+                        </li>
+                        <li class="submenu">
+                            <a href="javascript:void(0);"><img src="{% static 'admin_assets/img/icons/order.svg' %}" alt="img">
+                                <span>order</span> <span class="menu-arrow"></span>
+                            </a>
+                            <ul class="submenu-content">
+                                <li><a href="{% url 'order_app:admin_order_list' %}">Order List</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+
+    <!-- Main content block -->
+    <div class="main-content">
+        {% block content %}
+        <!-- Dynamic content will be injected here -->
+        {% endblock %}
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="{% static 'admin_assets/js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'admin_assets/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'admin_assets/js/feather.min.js' %}"></script>
+    <script src="{% static 'admin_assets/js/jquery.slimscroll.min.js' %}"></script>
+    <script src="{% static 'admin_assets/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'admin_assets/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'admin_assets/plugins/select2/js/select2.min.js' %}"></script>
+    <script src="{% static 'admin_assets/js/moment.min.js' %}"></script>
+    <script src="{% static 'admin_assets/js/script.js' %}"></script>
+    <script src="{% static 'admin_assets/js/sidebar.js' %}"></script>
+    <script src="{% static 'admin_assets/js/dropdown.js' %}"></script>
+
+  
+    <script>
+        $(document).ready(function() {
+            // Ensure that all the JavaScript needed for the sidebar or other features works correctly
+            feather.replace(); // Bootstrap feather icons
+    
+            // Handle submenu clicks for dropdown
+            $('.submenu > a').on('click', function(e) {
+                e.preventDefault(); // Prevent default anchor click
+                var $this = $(this);
+                var $submenu = $this.next('ul'); // Get the next <ul> element (submenu)
+    
+                if ($submenu.is(':visible')) {
+                    // If submenu is already visible, hide it
+                    $submenu.slideUp();
+                    $this.find('.menu-arrow').removeClass('active');
+                } else {
+                    // Hide all other submenus
+                    $('.submenu ul').slideUp();
+                    $('.menu-arrow').removeClass('active');
+                    // Show the clicked submenu
+                    $submenu.slideDown();
+                    $this.find('.menu-arrow').addClass('active');
+                }
+            });
+        });
+    </script>
+    
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script>
+        function showToast(message, type) {
+          let backgroundColor = "#000";
+          switch(type) {
+            case 'success':
+              backgroundColor = "#28a745";
+              break;
+            case 'error':
+              backgroundColor = "#dc3545";
+              break;
+            case 'warning':
+              backgroundColor = "#ffc107";
+              break;
+            case 'info':
+              backgroundColor = "#17a2b8";
+              break;
+          }
+      
+          Toastify({
+            text: message,
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            style: {
+              background: backgroundColor,
+            },
+          }).showToast();
+        }
+      
+        // For Django messages
+        {% if messages %}
+          {% for message in messages %}
+            showToast("{{ message }}", "{{ message.tags }}");
+          {% endfor %}
+        {% endif %}
+      </script>
+    
+</body>
+
+</html>

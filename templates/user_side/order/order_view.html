@@ -1,0 +1,489 @@
+{% extends 'user_side/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .order-status-badge {
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: capitalize;
+        transition: all 0.3s ease;
+    }
+    
+    .badge.bg-pending { 
+        background-color: #ffeeba; 
+        color: #856404;
+    }
+    .badge.bg-processing { 
+        background-color: #bee5eb; 
+        color: #0c5460;
+    }
+    .badge.bg-shipped { 
+        background-color: #b8daff; 
+        color: #004085;
+    }
+    .badge.bg-delivered { 
+        background-color: #c3e6cb; 
+        color: #155724;
+    }
+    .badge.bg-cancelled { 
+        background-color: #f5c6cb; 
+        color: #721c24;
+    }
+
+    .order-card {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: none;
+        border-radius: 15px;
+        transition: transform 0.3s ease;
+    }
+
+    .order-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .product-image-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 12px;
+        transition: transform 0.3s ease;
+    }
+
+    .product-image-container:hover {
+        transform: scale(1.05);
+    }
+
+    .tracking-info {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 15px;
+        margin-top: 15px;
+    }
+
+    .table th {
+        background-color: #f8f9fa;
+        border-top: none;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .order-summary {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 20px;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.5s ease-out forwards;
+    }
+    .bg-danger-dark {
+        background-color: #b52a2a !important; /* Darker red */
+    }
+
+    .review-button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .review-button:hover {
+        background-color: #218838;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(40, 167, 69, 0.2);
+    }
+
+    .review-button.disabled {
+        background-color: #6c757d;
+        cursor: not-allowed;
+    }
+
+    /* Review Modal Styles */
+    .review-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+    }
+
+    .review-modal-content {
+        position: relative;
+        background-color: #fff;
+        max-width: 500px;
+        margin: 50px auto;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        animation: modalSlideIn 0.3s ease-out;
+    }
+
+    @keyframes modalSlideIn {
+        from {
+            transform: translateY(-100px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .close-modal {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        font-size: 24px;
+        cursor: pointer;
+        color: #666;
+    }
+
+    .close-modal:hover {
+        color: #333;
+    }
+
+    /* Star Rating Styles */
+    .stars {
+        display: inline-flex;
+        flex-direction: row-reverse;
+        gap: 8px;
+    }
+
+    .stars input {
+        display: none;
+    }
+
+    .stars label {
+        font-size: 30px;
+        color: #ddd;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .stars label:hover,
+    .stars label:hover ~ label,
+    .stars input:checked ~ label {
+        color: #FFD700;
+    }
+
+    .review-textarea {
+        width: 100%;
+        min-height: 120px;
+        padding: 12px;
+        border: 2px solid #e1e1e1;
+        border-radius: 10px;
+        margin: 15px 0;
+        resize: vertical;
+    }
+
+    .review-textarea:focus {
+        border-color: #28a745;
+        outline: none;
+    }
+</style>
+
+<div class="container my-5 animate-fade-in">
+    <div class="row g-4">
+        <!-- Order Details Card -->
+        <div class="col-lg-8">
+            <div class="order-card card">
+                <div class="card-header bg-danger-dark text-white py-3" style="border-radius: 15px 15px 0 0;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">Order #{{ order.id }}</h3>
+                        <span class="order-status-badge badge bg-{{ order.order_status|lower }} ">
+                            {{ order.payment_method }}</span>
+                        <span class="order-status-badge badge bg-{{ order.order_status|lower }}">
+                            {{ order.order_status }}
+                        </span>
+                        
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-calendar-alt me-2"></i>
+                                <div>
+                                    <h6 class="text-muted mb-1">Order Date</h6>
+                                    <p class="mb-0 fw-bold">{{ order.created_at|date:"F j, Y" }}</p>
+                                    
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Products Table -->
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width: 50%">Product</th>
+                                    <th>Quantity</th>
+                                    <th>Price Each</th>
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in order_items %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% if item.product.image %}
+                                            <div class="product-image-container me-3">
+                                                <img src="{{ item.product.image.url }}" 
+                                                     alt="{{ item.product.title }}"
+                                                     class="rounded-3"
+                                                     style="width: 80px; height: 80px; object-fit: cover;">
+                                            </div>
+                                            {% endif %}
+                                            <div>
+                                                <h6 class="mb-0">{{ item.product.title }}</h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>₹{{ item.price }}</td>
+                                    
+                                    
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Order Summary -->
+                    <div class="order-summary">
+                        <div class="row">
+                            <div class="col-md-6 offset-md-6">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Subtotal:</span>
+                                    <span>₹{{ order.subtotal }}</span>
+                                    
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Tax:</span>
+                                    <span>₹{{ order.tax }}</span>
+                                    
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Delivery Charge:</span>
+                                    <span>₹{{ order.delivery_charge }}</span>
+                                    
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Packaging Charge:</span>
+                                    <span>₹{{ order.packaging_charge }}</span>
+                                    
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Discount:</span>
+                                    <span>₹-{{ order.discount }}</span>
+                                    
+                                </div>
+                               
+                                <hr>
+                                <div class="d-flex justify-content-between">
+                                    <strong>Total:</strong>
+                                    <strong>₹{{ order.total_amount }}</strong>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    {% if order.order_status == 'Completed' or order.order_status == 'DELIVERED' %}
+    <div class="order-summary">
+        <div class="row">
+            <div class="col-md-6 offset-md-6">
+                <!-- Add Invoice Button -->
+                <div class="mt-3">
+                    <a href="{% url 'order_app:generate_invoice' order_id=order.id %}" 
+                       class="btn btn-primary btn-block w-100">
+                        <i class="fas fa-file-invoice me-2"></i>Download Invoice
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+                    {% comment %} <form method="POST" action="{% url 'order_app:cancel_order' order_id=order.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            Cancel Order
+                        </button>
+                    </form> {% endcomment %}
+              
+                </div>
+            </div>
+        </div>
+
+        <!-- Shipping Details Card -->
+        <div class="col-lg-4">
+            <div class="order-card card "  style=" height:460px;">
+                <div class="card-header bg-secondary text-white py-3" style="border-radius: 15px 15px 0 0;">
+                    <h5 class="mb-0">
+                        <i class="fas fa-shipping-fast me-2"></i>
+                        Shipping Details
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+
+    <h6 class="text-muted mb-2">Delivery Address</h6>
+    {% if default_address %}
+                
+    <p class="mb-0">
+            {{ default_address.name }}<br>
+            {{ default_address.address }}<br>
+            {{ default_address.locality }}<br>
+            {{ default_address.city }}, {{ default_address.state }} - {{ default_address.pincode }}<br>
+            {{ default_address.phone_number }}
+
+            <br>
+            {% if order.user_address.landmark %}
+                Landmark: {{ default_address.landmark }}<br>
+            {% endif %}
+            <br>
+            <strong>Secondary Number:</strong>{{primary_mobile_number}}
+            
+        </p>
+    {% else %}
+        <p class="mb-0">No delivery address provided.</p>
+    {% endif %}
+</div>
+{% comment %} {% if order.order_status == 'DELIVERED' %}
+    {% if not item.is_reviewed %}
+    <button onclick="openReviewModal('{{ item.product.id }}', '{{ item.product.title }}')" 
+            class="review-button">
+        <i class="fas fa-star me-2"></i>Write Review
+    </button>
+    {% else %}
+    <button class="review-button disabled" disabled>
+        <i class="fas fa-check me-2"></i>Reviewed
+    </button>
+    {% endif %}
+{% endif %} {% endcomment %}
+</div>
+
+{% comment %}                     
+                    <div class="tracking-info">
+                        <h6 class="mb-2">
+                            <i class="fas fa-truck me-2"></i>
+                            Tracking Information
+                        </h6> 
+                       <p class="mb-2">Tracking Number:</p>
+                        <div class="bg-white p-2 rounded">
+                            <code class="text-primary">{{ order.tracking_number }}</code>
+                        </div>
+
+                        <br>
+                     <a href="{% url 'order_app:status_page' order_id=order.id %}" class="btn btn-outline-danger btn-sm btn-block">
+                            <i class="fas fa-shopping-bag me-2"></i>Tracking
+                          </a> 
+ </div>  {% endcomment %}
+                    
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<div id="reviewModal" class="review-modal">
+    <div class="review-modal-content">
+        <span class="close-modal" onclick="closeReviewModal()">&times;</span>
+        <h4 class="mb-3">Write a Review</h4>
+        <p id="reviewProductTitle" class="text-muted mb-4"></p>
+        
+        <form id="reviewForm" method="POST" action="{% url 'create_review' %}">
+            {% csrf_token %}
+            <input type="hidden" id="productId" name="product_id">
+            <input type="hidden" id="orderId" name="order_id" value="{{ order.id }}">
+            
+            <div class="text-center mb-4">
+                <div class="stars">
+                    <input type="radio" id="star5" name="rating" value="5">
+                    <label for="star5">★</label>
+                    <input type="radio" id="star4" name="rating" value="4">
+                    <label for="star4">★</label>
+                    <input type="radio" id="star3" name="rating" value="3">
+                    <label for="star3">★</label>
+                    <input type="radio" id="star2" name="rating" value="2">
+                    <label for="star2">★</label>
+                    <input type="radio" id="star1" name="rating" value="1">
+                    <label for="star1">★</label>
+                </div>
+            </div>
+            
+            <textarea name="text" 
+                      class="review-textarea" 
+                      placeholder="Share your experience with this product..."
+                      required></textarea>
+            
+            <button type="submit" class="btn btn-success w-100">
+                Submit Review
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Add this JavaScript at the end of your template -->
+<script>
+function openReviewModal(productId, productTitle) {
+    document.getElementById('reviewModal').style.display = 'block';
+    document.getElementById('productId').value = productId;
+    document.getElementById('reviewProductTitle').textContent = productTitle;
+    document.body.style.overflow = 'hidden';
+}
+
+function closeReviewModal() {
+    document.getElementById('reviewModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+// Close modal if clicking outside
+window.onclick = function(event) {
+    const modal = document.getElementById('reviewModal');
+    if (event.target == modal) {
+        closeReviewModal();
+    }
+}
+
+// Form submission handling
+document.getElementById('reviewForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const rating = document.querySelector('input[name="rating"]:checked');
+    const text = document.querySelector('textarea[name="text"]').value;
+    
+    if (!rating) {
+        alert('Please select a rating');
+        return;
+    }
+    
+    if (text.length < 10) {
+        alert('Please write at least 10 characters');
+        return;
+    }
+    
+    this.submit();
+});
+</script>
+
+{% endblock %}

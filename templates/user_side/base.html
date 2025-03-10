@@ -1,0 +1,779 @@
+<!-- basic.html -->
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Cake Chief{% endblock %}</title>
+    <link rel="icon" href="{% static 'admin_assets\img\Starlogo.png' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700"> 
+    <link rel="stylesheet" href="{% static 'user_assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'user_assets/css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'user_assets/css/jquery-ui.css' %}">
+    <link rel="stylesheet" href="{% static 'user_assets/css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'user_assets/css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'user_assets/css/aos.css' %}">
+    <link rel="stylesheet" href="{% static 'user_assets/css/style.css' %}"> 
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    
+
+
+<style>
+  .logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    transition: all 0.3s ease;
+  }
+  
+  .log_logo {
+    max-width: 100px;
+    max-height: 100px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    transition: all 0.3s ease;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .log_logo {
+      max-width: 80px;
+      max-height: 80px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .log_logo {
+      max-width: 60px;
+      max-height: 60px;
+    }
+    
+    .logo-container {
+      padding: 5px;
+    }
+  }
+  
+  /* Ensure the navbar maintains proper spacing */
+  .site-navbar-top {
+    padding: 15px 0;
+  }
+  
+  .site-navbar .site-navigation {
+    padding-top: 20px;
+  }
+.site-blocks-cover {
+background-image: url("{% static 'user_assets/images/hero_im.jpg' %}");
+}
+
+.same-size {
+width: 100%; /* Make the image take full width of its parent */
+height: 300px; /* Set a fixed height for all images */
+object-fit: cover; /* Ensures the image covers the area without distortion */
+}
+
+.block-2-item {
+text-align: center; /* Center the text */
+}
+
+figure.image {
+width: 100%;
+height: 300px; /* Set the height to match the image */
+display: flex;
+justify-content: center;
+align-items: center;
+overflow: hidden;
+}
+
+.text {
+padding: 10px 0;
+}
+.site-navbar-top {
+padding-top: 15px;
+}
+
+.log_logo {
+max-width: 100px;
+max-height: 100px;
+}
+
+.site-top-icons ul {
+display: flex;
+justify-content: flex-end;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+.site-navbar-top {
+padding: 10px 0;
+}
+
+/* Adjust the search form */
+.site-block-top-search {
+flex: 1;
+display: flex;
+justify-content: flex-start;
+}
+
+/* Center the logo on mobile screens */
+.log_logo {
+max-width: 80px;
+max-height: 80px;
+}
+
+/* Stack the icons vertically on mobile */
+.site-top-icons ul {
+justify-content: space-between;
+padding: 0 10px;
+}
+
+.site-cart {
+display: flex;
+align-items: center;
+}
+
+/* Reduce margin for smaller screens */
+.site-top-icons ul li {
+margin-left: 10px;
+}
+}
+
+@media (max-width: 480px) {
+.site-block-top-search input {
+width: 150px;
+}
+
+.log_logo {
+max-width: 70px;
+}
+
+.site-top-icons ul {
+display: flex;
+justify-content: space-around;
+}
+}
+
+.toastify {
+  padding: 12px 20px;
+  color: white;
+  display: inline-block;
+  box-shadow: 0 3px 6px -1px rgba(0, 0, 0, 0.12);
+  background-color: #333;
+  position: fixed;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  max-width: calc(50% - 20px);
+  z-index: 2147483647;
+}
+
+.toastify.on {
+  opacity: 1;
+}
+.user-dropdown {
+position: relative;
+display: inline-block;
+}
+
+.site-top-icons {
+padding: 1rem;
+}
+
+.icons-container {
+list-style: none;
+padding: 0;
+margin: 0;
+display: flex;
+align-items: center;
+justify-content: flex-end;
+gap: 1.5rem;
+}
+
+.icon-item {
+position: relative;
+}
+
+.icon-link {
+color: #333;
+text-decoration: none;
+display: flex;
+align-items: center;
+}
+
+.icon {
+font-size: 1.25rem;
+}
+
+/* Button styles for all icons */
+.dropdown-toggle {
+background: none;
+border: none;
+padding: 0.5rem;
+cursor: pointer;
+color: #333;
+transition: color 0.2s ease;
+}
+
+.dropdown-toggle:hover {
+color: #666;
+}
+
+/* Count badge */
+.count {
+position: absolute;
+top: -8px;
+right: -8px;
+background-color:#b52a2a;
+color: white;
+border-radius: 50%;
+padding: 0.25rem 0.5rem;
+font-size: 0.75rem;
+min-width: 1.5rem;
+text-align: center;
+}
+
+/* Dropdown menu only for user icon */
+.user-dropdown {
+position: relative;
+}
+
+.dropdown-menu {
+display: none;
+position: absolute;
+right: 0;
+top: 100%;
+background-color: white;
+min-width: 180px;
+box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+border-radius: 8px;
+padding: 0.5rem 0;
+z-index: 1000;
+}
+
+.dropdown-menu.show {
+display: block;
+}
+
+.dropdown-item {
+display: flex;
+align-items: center;
+padding: 0.75rem 1rem;
+text-decoration: none;
+color: #333;
+transition: background-color 0.2s;
+}
+
+.dropdown-item:hover {
+background-color: #f8f9fa;
+}
+
+.dropdown-item i {
+margin-right: 0.75rem;
+width: 1rem;
+}
+
+/* Mobile menu toggle */
+@media (min-width: 769px) {
+.d-md-none {
+display: none;
+}
+}
+
+.count-badge {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background-color: #ff3b3b; /* Bright red for visibility */
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 0.8em;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  transform: scale(1);
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Add a slight pop effect when count updates */
+.count-badge.updated {
+  transform: scale(1.2);
+}
+
+.icon.fas.fa-shopping-cart, .icon.far.fa-heart{
+color: #000000;
+}
+
+/* Ensure hover state maintains the same color */
+.icon-link:hover .fas.fa-shopping-cart {
+color:#000000;
+opacity: 0.8; /* Optional: adds a subtle hover effect */
+}
+.bg-footer {
+background-color:#b52a2a;
+color: #ffffff;
+}
+
+.grid-footer {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+gap: 2rem;
+margin-bottom: 3rem;
+}
+
+.footer-col {
+padding: 1rem;
+}
+
+.footer-heading {
+font-size: 1.25rem;
+font-weight: 600;
+margin-bottom: 1.5rem;
+color: #ffffff;
+}
+
+.footer-nav-grid {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 1rem;
+}
+
+.footer-list {
+list-style: none;
+padding: 0;
+}
+
+.footer-list li {
+margin-bottom: 0.75rem;
+}
+
+.footer-list a {
+color: #b52a2a;
+text-decoration: none;
+transition: color 0.3s ease;
+}
+
+.footer-list a:hover {
+color:#b52a2a;
+}
+
+.promo-card {
+background-color: #2d2d2d;
+border-radius: 0.5rem;
+overflow: hidden;
+}
+
+.promo-image {
+width: 100%;
+height: 200px;
+object-fit: cover;
+}
+
+.promo-content {
+padding: 1rem;
+}
+
+.promo-title {
+font-weight: 500;
+margin-bottom: 0.5rem;
+}
+
+.promo-text {
+color: #a0aec0;
+font-size: 0.875rem;
+}
+
+.footer-contact {
+list-style: none;
+padding: 0;
+}
+
+.contact-item {
+display: flex;
+align-items: start;
+margin-bottom: 1rem;
+color: #a0aec0;
+}
+
+.contact-icon {
+color: #ed4848;
+margin-right: 0.75rem;
+margin-top: 0.25rem;
+}
+
+.contact-item a {
+color: #a0aec0;
+text-decoration: none;
+transition: color 0.3s ease;
+}
+
+.contact-item a:hover {
+color:#b52a2a;
+}
+
+.newsletter-text {
+color:#b52a2a;
+margin-bottom: 1rem;
+}
+
+.newsletter-form {
+display: flex;
+flex-direction: column;
+gap: 1rem;
+}
+
+.newsletter-input {
+width: 100%;
+padding: 0.75rem 1rem;
+background-color: #2d2d2d;
+border: 1px solid #4a4a4a;
+border-radius: 0.375rem;
+color: #ffffff;
+transition: border-color 0.3s ease;
+}
+
+.newsletter-input:focus {
+outline: none;
+border-color: #ed4848;
+}
+
+.newsletter-button {
+width: 100%;
+padding: 0.75rem 1rem;
+background-color: #ed4848;
+color: #ffffff;
+border: none;
+border-radius: 0.375rem;
+cursor: pointer;
+transition: background-color 0.3s ease;
+}
+
+.newsletter-button:hover {
+background-color: #d43c3c;
+}
+
+.copyright {
+text-align: center;
+padding-top: 2rem;
+border-top: 1px solid #2d2d2d;
+color: #a0aec0;
+}
+
+@media (max-width: 768px) {
+.grid-footer {
+grid-template-columns: 1fr;
+}
+
+.footer-nav-grid {
+grid-template-columns: 1fr;
+}
+}
+.site-footer a:hover {
+  color:#b52a2a !important;
+}
+.site-navbar .site-navigation .site-menu .active > a {
+  color:#b52a2a !important;
+}
+.site-navbar .site-navigation .site-menu  a:hover {
+  color:#b52a2a !important;
+}
+.site-navbar .site-navigation .site-menu  a:hover {
+  color:#b52a2a;
+}
+
+.custom-alert {
+  font-size: 0.875rem; /* Smaller text */
+  margin:0px;
+  padding:0px;
+
+}
+</style>
+{% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="site-wrap" style="width: 100%;">
+        <header class="site-navbar" role="banner" style="width: 100%; background-color: #ffff;">
+          <div class="site-navbar-top" style="width: 100%; padding-top: 15px;">
+            <div style="width: 100%; max-width: 1200px; margin: 0 auto; height: 70px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                
+                <div style="flex: 1; display: flex; align-items: center;">
+                 
+                </div>
+
+                
+                
+                <div style="flex: 1; display: flex; justify-content: center; align-items: center;">
+                  <a href="{% url 'home' %}" class="logo-container">
+                    <img class="log_logo" src="{% static 'user_assets/images/logo.png' %}" alt="Logo">
+                  </a>
+                </div>
+                <div style="flex: 1;">
+                  <div class="site-top-icons">
+                    <ul class="icons-container">
+                      {% if user.is_authenticated %}
+                      <li class="icon-item user-dropdown">
+                        <button class="dropdown-toggle">
+                          <i class="icon fas fa-user"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                          {% if demo_user %}
+                            <a href="{% url 'logout' %}" class="dropdown-item">
+                              <i class="fas fa-sign-out-alt"></i>
+                              Logout
+                            </a>
+                          {% else %}
+                            <a href="{% url 'user_app:user_show' %}" class="dropdown-item">
+                              <i class="fas fa-user-circle"></i>
+                              Profile
+                            </a>
+                            <a href="{% url 'order_app:order_list' %}" class="dropdown-item">
+                              <i class="fas fa-map-marker-alt"></i>
+                              Orders
+                            </a>
+                            <a href="{% url 'wallet_app:wallet_view' %}" class="dropdown-item">
+                              <i class="fas fa-wallet"></i>
+                              Wallet
+                            </a>
+                            <a href="{% url 'logout' %}" class="dropdown-item">
+                              <i class="fas fa-sign-out-alt"></i>
+                              Logout
+                            </a>
+                          {% endif %}
+                        </div>
+                      </li>
+                      {% endif %}
+                      {% if user.is_authenticated and not user.username == 'demo_user' %}
+                      <li class="icon-item">
+                        <a href="{% url "wishlist_app:wishlist" %}" class="icon-link">
+                            <i class="icon far fa-heart"></i>
+                            <span class="count-badge" >
+                              {{ request.session.wishlist_count|default:0 }}
+                          </span>
+                        </a>
+                      </li>
+                      
+                      <li class="icon-item">
+                        <a href="{% url "cart_app:cart" %}" class="icon-link site-cart">
+                            <i class="icon fas fa-shopping-cart"></i>
+                            <span class="count-badge" >
+                                {{ request.session.cart_count|default:0 }}
+                            </span>
+                        </a>
+                    </li>
+                    
+                      {% endif %}
+                      {% if not user.is_authenticated %}
+                      <li style="margin-left: 30px;">
+                        <a href="{% url 'login' %}" class="login-signup-btn" style="text-decoration: none; padding: 8px 15px; background-color:#b52a2a; color: #fff; border-radius: 5px; font-size: 14px; margin: 0;">Login / Signup</a>
+                      </li>
+                      {% endif %}
+                       <li class="icon-item d-inline-block d-md-none">
+                        <a href="#" class="icon-link site-menu-toggle js-menu-toggle">
+                          <i class="icon fas fa-bars"></i>
+                        </a>
+                      </li> 
+                     
+                    </ul>
+                  </div>
+                </div>
+
+</div>
+</div>
+</div> 
+
+
+
+<nav class="site-navigation text-right text-md-center" role="navigation">
+<div class="container">
+<ul class="site-menu js-clone-nav d-none d-md-block">
+  <li >
+    <a href="{% url 'home' %}">Home</a>
+    
+  </li>
+  
+  <li >
+    <a href="{% url "about" %}">About</a>
+    
+  </li>
+  <li><a href="{% url "shop" %}">Shop</a></li>
+ 
+  {% comment %} <li><a href="{% url "review_list" %}">Reviews</a></li> {% endcomment %}
+  <li><a href="{% url "contact" %}">Contact</a></li>
+  <li> 
+   
+  
+  </li>
+</ul>
+
+</div>
+
+</nav>
+</header>
+    
+    <main>
+        {% block content %}
+        <!-- Page specific content will go here -->
+        {% endblock %}
+    </main>
+    
+    <footer class="site-footer border-top">
+        <div class="container">
+          <div<footer class="bg-footer py-16">
+            <div class="container mx-auto px-4">
+                <div class="grid-footer">
+                    <!-- Navigation Section -->
+                    <div class="footer-col">
+                        <h3 class="footer-heading">Navigation</h3>
+                        <div class="footer-nav-grid">
+                            <ul class="footer-list">
+                                <li><a href="{% url 'home' %}">Sell online</a></li>
+                                <li><a href="">Features</a></li>
+                                <li><a href="">Shopping cart</a></li>
+                                <li><a href="">Store builder</a></li>
+                            </ul>
+                            <ul class="footer-list">
+                                <li><a href="">Mobile commerce</a></li>
+                                <li><a href="">Dropshipping</a></li>
+                                <li><a href="">Development</a></li>
+                            </ul>
+                        </div>
+                    </div>
+        
+                    <!-- Promo Section -->
+                    {% comment %} <div class="footer-col">
+                        <h3 class="footer-heading">Featured</h3>
+                        <div class="promo-card">
+                            <img src="{% static 'user_assets/images/Blueberry.jpg' %}" alt="Promo image" class="promo-image">
+                            <div class="promo-content">
+                                <h4 class="promo-title">Special Collection</h4>
+                                <p class="promo-text">Limited time offer - 25% off</p>
+                            </div>
+                        </div>
+                    </div> {% endcomment %}
+        
+                    <!-- Contact Info -->
+                    <div class="footer-col">
+                        <h3 class="footer-heading">Contact Us</h3>
+                        <ul class="footer-contact">
+                            <li class="contact-item">
+                                <i class="fas fa-map-marker-alt contact-icon"></i>
+                                <span>National Highway 66 near Calicut University Kakkanchery Chelembra PO, Dt, Thenhipalam, Kerala 673634</span>
+                            </li>
+                            <li class="contact-item">
+                                <i class="fas fa-phone contact-icon"></i>
+                                <a href="tel:+918590934634">+91 85 909 346 34</a>
+                            </li>
+                            <li class="contact-item">
+                                <i class="fas fa-envelope contact-icon"></i>
+                                <a href="mailto:cakechiefshop@gmail.com">cakechiefshop@gmail.com</a>
+                            </li>
+                        </ul>
+                    </div>
+        
+                    <!-- Newsletter Section -->
+                    {% comment %} <div class="footer-col">
+                        <h3 class="footer-heading">Newsletter</h3>
+                        <p class="newsletter-text">Subscribe to receive updates and exclusive offers</p>
+                        <form method="post" action="" class="newsletter-form">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <input type="email" name="email" placeholder="Your email address" class="newsletter-input" required>
+                            </div>
+                            <button type="submit" class="newsletter-button">Subscribe</button>
+                        </form>
+                    </div> {% endcomment %}
+                </div>
+        
+                <!-- Copyright -->
+                <div class="copyright">
+                    <p>&copy; {% now "Y" %} Your Company. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+
+
+      <script src="{% static 'user_assets/js/jquery-3.3.1.min.js' %}"></script>
+      <script src="{% static 'user_assets/js/jquery-ui.js' %}"></script>
+      <script src="{% static 'user_assets/js/popper.min.js' %}"></script>
+      <script src="{% static 'user_assets/js/bootstrap.min.js' %}"></script>
+      <script src="{% static 'user_assets/js/owl.carousel.min.js' %}"></script>
+      <script src="{% static 'user_assets/js/jquery.magnific-popup.min.js' %}"></script>
+      <script src="{% static 'user_assets/js/aos.js' %}"></script>
+      <script src="{% static 'user_assets/js/main.js' %}"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> 
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const dropdownToggle = document.querySelector('.user-dropdown .dropdown-toggle');
+      const dropdownMenu = document.querySelector('.dropdown-menu');
+
+      dropdownToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle('show');
+      });
+
+      document.addEventListener('click', function(e) {
+        if (!dropdownMenu.contains(e.target)) {
+          dropdownMenu.classList.remove('show');
+        }
+      });
+    });
+  </script>
+  <script>
+    function showToast(message, type) {
+      let backgroundColor = "#000";
+      switch(type) {
+        case 'success':
+        backgroundColor = "#0BDA51"; 
+        break;
+      case 'error':
+        backgroundColor = "#D33C3C";
+        break;
+      case 'warning':
+        backgroundColor = "#FFB347"; 
+        break;
+      case 'info':
+        backgroundColor = "#9B6A6C";
+        break;
+      }
+  
+      Toastify({
+        text: message,
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        style: {
+          background: backgroundColor,
+          boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+          borderRadius: "8px",
+          fontWeight: "500",
+        },
+      }).showToast();
+    }
+  
+    // For Django messages
+    {% if messages %}
+      {% for message in messages %}
+        showToast("{{ message }}", "{{ message.tags }}");
+      {% endfor %}
+    {% endif %}
+  </script>
+</body>
+
+</html>

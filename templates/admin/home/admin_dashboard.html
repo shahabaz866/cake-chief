@@ -1,0 +1,878 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <meta name="description" content="POS - Bootstrap Admin Template">
+    <meta name="keywords"
+        content="admin, estimates, bootstrap, business, corporate, creative, management, minimal, modern,  html5, responsive">
+    <meta name="author" content="Dreamguys - Bootstrap Admin Template">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Cake Chief Admin</title>
+
+    
+    <link rel="icon" href="{% static 'admin_assets\img\Starlogo.png' %}">
+    <link rel="stylesheet" href="{% static 'admin_assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'admin_assets/css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'admin_assets/plugins/select2/css/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'admin_assets/css/bootstrap-datetimepicker.min.css' %}">
+    <link rel="stylesheet" href="{% static 'admin_assets/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'admin_assets/plugins/fontawesome/css/fontawesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'admin_assets/plugins/fontawesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'admin_assets/css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <style>
+        .toastify {
+            padding: 12px 20px;
+            color: white;
+            display: inline-block;
+            box-shadow: 0 3px 6px -1px rgba(0, 0, 0, 0.12);
+            background-color: #333;
+            position: fixed;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            max-width: calc(50% - 20px);
+            z-index: 2147483647;
+        }
+        
+        .toastify.on {
+            opacity: 1;
+        }
+        :root {
+            --primary: #6366f1;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f3f4f6;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .filters {
+            margin-bottom: 1.5rem;
+        }
+
+        .filters select, .filters input, .filters button {
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            margin-right: 1rem;
+            background: white;
+        }
+
+        .filters button {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+        }
+
+        .filters button.export {
+            background: #22c55e;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            padding: 1.5rem;
+            border-radius: 1rem;
+            color: white;
+        }
+ 
+
+        .card-gradient-1 { background: linear-gradient(135deg, #1b2850 0%,  #1b2850 100%); }
+        .card-gradient-2 { background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); }
+        .card-gradient-3 { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        .card-gradient-4 { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+
+        .chart-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            margin-bottom: 2rem;
+            height: 400px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-purple { background: #e0e7ff; color: #4338ca; }
+        .badge-green { background: #dcfce7; color: #16a34a; }
+        .badge-orange { background: #ffedd5; color: #c2410c; }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th, .table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .table th {
+            background: #f8fafc;
+            font-weight: 500;
+            color: #64748b;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 0.75rem;
+        }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+        .chart-container {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            height: 400px;
+        }
+        
+        canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+        .one {
+            padding: 1.5rem;
+            border-radius: 1rem;
+            color: white;
+            margin-bottom: 2rem;
+            background: #1b2850;
+            
+
+        }
+        .list-container {
+            max-width: 800px;
+            margin: 20px auto;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .list-item {
+            display: grid;
+            grid-template-columns: 40px 80px auto 100px;
+            align-items: center;
+            gap: 20px;
+            padding: 16px;
+            margin-bottom: 12px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .list-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .index {
+            background: #f3f4f6;
+            color: #4f46e5;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .product-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .product-title {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 16px;
+        }
+
+        .sold-count {
+            background: #fee2e2;
+            color: #dc2626;
+            {% comment %} padding: 2px 6px; /* Reduced padding */ {% endcomment %}
+            border-radius: 6px; /* Smaller rounded corners */
+            font-size: 12px; /* Reduced font size */
+            font-weight: 400; /* Lighter font weight */
+            text-align: center;
+            white-space: nowrap;
+            width: 60px;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .badge-green {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .badge-orange {
+            background: #ffedd5;
+            color: #ea580c;
+        }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .item-name {
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .sold-count {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+      
+    .header-left {
+        display: flex;
+        justify-content: center; /* Center horizontally */
+        align-items: center; /* Center vertically */
+        width: 100%; /* Ensure it takes full width */
+        height: 80px; /* Set a fixed height for the header */
+        background-color: #f8f8f8; /* Optional: Add a background color */
+    }
+
+    /* Style for the Cake Chief heading */
+    .cake-chief-heading {
+        font-family: 'Poppins', sans-serif; /* Modern and clean font */
+        font-size: 26px; /* Large size for impact */
+        color: #1b2850;
+        font-weight: 700; /* Bold weight */
+        text-transform: uppercase; /* Uppercase for a strong look */
+        letter-spacing: 2px; /* Spacing between letters */
+        text-align: center; /* Center the text */
+        transition: transform 0.3s ease, color 0.3s ease; /* Smooth transitions */
+    }
+
+    /* Add a glowing effect */
+    .cake-chief-heading::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(211, 60, 60, 0.3), transparent 70%); /* Glow effect */
+        transform: translate(-50%, -50%) scale(0); /* Start with no glow */
+        transition: transform 0.5s ease; /* Smooth glow animation */
+        z-index: -1; /* Place behind the text */
+    }
+
+    /* Hover effect */
+    .cake-chief-heading:hover {
+        color: #1b2850;
+         /* Lighter shade of red on hover */
+        transform: scale(1.05); /* Slightly enlarge on hover */
+    }
+
+    .cake-chief-heading:hover::before {
+        transform: translate(-50%, -50%) scale(1); /* Expand glow on hover */
+    }
+
+    /* Add a subtle shadow for depth */
+    .cake-chief-heading {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    </style>
+</head>
+
+<body>
+    <div id="global-loader">
+        <div class="whirly-loader"> </div>
+    </div>
+
+    <div class="main-wrapper">
+
+        <div class="header">
+
+            <div class="header-left active">
+                <a href="{% url "dashboard" %}" class="logo">
+                    <h2 class="cake-chief-heading">Cake Chief</h2>                </a>
+                <a href="{% url 'dashboard' %}" class="logo-small">
+                    <img src="{% static 'admin_assets\img\logo\logo-small.png' %}" alt="">
+
+                </a>
+                <a id="toggle_btn" href="javascript:void(0);">
+                </a>
+            </div>
+
+            <a id="mobile_btn" class="mobile_btn" href="#sidebar">
+                <span class="bar-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </a>
+
+            <ul class="nav user-menu">
+                <li class="nav-item dropdown has-arrow main-drop">
+                    <a href="javascript:void(0);" class="dropdown-toggle nav-link userset" data-bs-toggle="dropdown">
+                        <span class="user-img"><img src="{% static 'admin_assets/img/profiles/avatoradmn.jpg' %}" alt="">
+                            <span class="status online"></span></span>
+                    </a>
+                    <div class="dropdown-menu menu-drop-user">
+                        <div class="profilename">
+                            {% comment %} <div class="profileset">
+                                <span class="user-img"><img src="{% static 'admin_assets/img/profiles/avatoradmn.jpg' %}" alt="">
+                                    <span class="status online"></span></span>
+                                <div class="profilesets">
+                                    <h6>John Doe</h6>
+                                    <h5>Admin</h5>
+                                </div>
+                            </div> {% endcomment %}
+                            <hr class="m-0">
+                            {% comment %} <a class="dropdown-item" href="profile.html"> <i class="me-2" data-feather="user"></i> My
+                                Profile</a>
+                            <a class="dropdown-item" href="generalsettings.html"><i class="me-2"
+                                    data-feather="settings"></i>Settings</a> {% endcomment %}
+                            <hr class="m-0">
+                            <a class="dropdown-item logout pb-0" href="{% url "home:logout" %}"><img
+                                    src="{% static 'admin_assets/img/icons/log-out.svg' %}" class="me-2" alt="img">Logout</a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+
+            <div class="dropdown mobile-user-menu">
+                <a href="javascript:void(0);" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+                    aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    {% comment %} <a class="dropdown-item" href="profile.html">My Profile</a>
+                    <a class="dropdown-item" href="generalsettings.html">Settings</a> {% endcomment %}
+                    <a class="dropdown-item" href="{% url "home:logout" %}">Logout</a>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-inner slimscroll">
+                <div id="sidebar-menu" class="sidebar-menu">
+                    <ul>
+                        <li class="active">
+                            <a href="{% url 'dashboard' %}"><img src="{% static 'admin_assets/img/icons/dashboard.svg' %}" alt="img"><span>
+                                    Dashboard</span> </a>
+                        </li>
+                        <li class="submenu">
+                            <a href="javascript:void(0);">
+                                <img src="{% static 'admin_assets/img/icons/product.svg' %}" alt="img">
+                                <span>Product </span> <span class="menu-arrow"></span>
+                            </a>
+                            <ul class="submenu-content">
+                                <li><a href="{% url 'product_list' %}">Product List</a></li>
+                                <li><a href="{% url 'add_products' %}">Add Product</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="submenu">
+                            <a href="javascript:void(0);">
+                                <img src="{% static 'admin_assets/img/icons/category.svg' %}" alt="img">
+                                <span>Category </span> <span class="menu-arrow"></span>
+                            </a>
+                            <ul class="submenu-content">
+                                <li><a href="{% url 'category_list' %}">Category List</a></li>
+                                <li><a href="{% url 'add_category' %}">Add Category</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="submenu">
+                            <a href="javascript:void(0);">
+                                <img src="{% static 'admin_assets/img/icons/flavour.svg' %}" alt="img">
+                                <span>Flavour </span> <span class="menu-arrow"></span>
+                            </a>
+                            <ul class="submenu-content">
+                                <li><a href="{% url 'flavour_list' %}">Flavour List</a></li>
+                                <li><a href="{% url 'add_flavour' %}">Add Flavour</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="submenu">
+                            <a href="javascript:void(0);">
+                                <img src="{% static 'admin_assets/img/icons/coupon.svg' %}" alt="img">
+                                <span>Coupon </span> <span class="menu-arrow"></span>
+                            </a>
+                            <ul class="submenu-content">
+                                <li><a href="{% url 'coupon_list' %}">List Coupons</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li class="submenu">
+                            <a href="javascript:void(0);"><img src="{% static 'admin_assets/img/icons/users1.svg' %}" alt="img">
+                                <span>People</span><span class="menu-arrow"></span>
+                            </a>
+                            <ul class="submenu-content">
+                                <li><a href="{% url 'user_management' %}">User List</a></li>
+                            </ul>
+                        </li>
+                        <li class="submenu">
+                            <a href="javascript:void(0);"><img src="{% static 'admin_assets/img/icons/order.svg' %}" alt="img">
+                                <span>order</span> <span class="menu-arrow"></span>
+                            </a>
+                            <ul class="submenu-content">
+                                <li><a href="{% url 'order_app:admin_order_list' %}">Order List</a></li>
+                            </ul>
+                        </li>
+                        
+                        
+                       
+                        <li class="submenu">
+                            <a href="javascript:void(0);"><img src="{% static 'admin_assets/img/icons/users1.svg' %}" alt="img"><span>
+                                User</span> <span class="menu-arrow"></span></a>
+                            <ul>
+                                
+                                <li><a href="{% url "user_management" %}">User List</a></li>
+                               
+                            </ul>
+                        </li>
+                       
+                        
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-wrapper">
+            <div class="container">
+                <div class="one  rounded-xl p-6 mb-8 text-white">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold">Sales Dashboard</h2>
+                        <div class="text-sm">
+                            <span class="opacity-75">Last updated:</span> 
+                            <span class="font-semibold">{% now "F j, Y H:i" %}</span>
+                        </div>
+                    </div>
+                    
+                    <form method="GET" class="filters">
+                        <select name="report_type" onchange="toggleDateInputs(this.value)">
+                            <option value="daily" {% if report_type == 'daily' %}selected{% endif %}>Daily</option>
+                            <option value="weekly" {% if report_type == 'weekly' %}selected{% endif %}>Weekly</option>
+                            <option value="monthly" {% if report_type == 'monthly' %}selected{% endif %}>Monthly</option>
+                            <option value="yearly" {% if report_type == 'yearly' %}selected{% endif %}>Yearly</option>
+                            <option value="custom" {% if report_type == 'custom' %}selected{% endif %}>Custom Range</option>
+                        </select>
+                        
+                        <div id="dateInputs" {% if report_type != 'custom' %}style="display: none;"{% endif %}>
+                            <input type="date" name="start_date" value="{{ start_date }}">
+                            <input type="date" name="end_date" value="{{ end_date }}">
+                        </div>
+                        
+                        <button type="submit">Apply Filter</button>
+                        <button type="button" class="export" onclick="window.location.href='?export=pdf&report_type={{ report_type }}&start_date={{ start_date }}&end_date={{ end_date }}'">
+                            Export PDF
+                        </button>
+                    </form>
+                </div>
+        
+                <div class="stats-grid">
+                    <div class="stat-card card-gradient-1">
+                        <h3>Total Orders</h3>
+                        <p class="text-4xl font-bold">{{ total_orders }}</p>
+                        {% comment %} <div class="mt-2 text-sm opacity-75">↗️ 12% increase</div> {% endcomment %}
+                    </div>
+                    <div class="stat-card card-gradient-2">
+                        <h3>Total Sales</h3>
+                        <p class="text-4xl font-bold">₹{{ total_sales|floatformat:2 }}</p>
+                        {% comment %} <div class="mt-2 text-sm opacity-75">↗️ 8% increase</div> {% endcomment %}
+                    </div>
+                    <div class="stat-card card-gradient-3">
+                        <h3>Net Revenue</h3>
+                        <p class="text-4xl font-bold">₹{{ net_revenue|floatformat:2 }}</p>
+                        {% comment %} <div class="mt-2 text-sm opacity-75">↗️ 15% increase</div> {% endcomment %}
+                    </div>
+                    <div class="stat-card card-gradient-4">
+                        <h3>Average Order</h3>
+                        <p class="text-4xl font-bold">₹{{ average_sales|default:0|floatformat:2 }}</p>
+                        {% comment %} <div class="mt-2 text-sm opacity-75">↗️ </div> {% endcomment %}
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <h3 class="text-xl font-semibold text-gray-800">Sales Trend</h3>
+                    <canvas id="salesChart"></canvas>
+                </div>
+        
+                <div class="grid-3">
+                    <div class="card">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-semibold">Best Selling Products</h3>
+                            <span class="badge badge-purple">Top 5</span>
+                        </div>
+                        {% for product in best_seller_product %}
+                        <div class="list-item">
+                            <div class="index">
+                                {{ forloop.counter }}
+                            </div>
+                            
+                            <img class="product-image" 
+                                 src="{{ product.image.url }}" 
+                                 alt="{{ product.title }}">
+                            
+                            <div class="product-title">
+                                {{ product.title }}
+                            </div>
+                            
+                            <div class="sold-count">
+                                {{ product.sold_count }} sold
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+        
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Top Categories</h3>
+                            <span class="badge badge-green">Trending</span>
+                        </div>
+                        {% for category in top_category %}
+                        <div class="list-item">
+                            <div class="item-info">
+                                <span class="dot" style="background: #22c55e;"></span>
+                                <span class="item-name">{{ category.name }}</span>
+                            </div>
+                            <span class="sold-count">{{ category.total_sold }} sold</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+            
+                    <!-- Flavours Card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Top Flavours</h3>
+                            <span class="badge badge-orange">Popular</span>
+                        </div>
+                        {% for flavour in top_flavour %}
+                        <div class="list-item">
+                            <div class="item-info">
+                                <span class="dot" style="background: #f59e0b;"></span>
+                                <span class="item-name">{{ flavour.flavour__name }}</span>
+                            </div>
+                            <span class="sold-count">{{ flavour.total_sold }} sold</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+        
+                <div class="card">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-semibold">Recent Orders</h3>
+                        <span class="badge badge-purple">Live Updates</span>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Date</th>
+                                <th>Customer</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                            <tr>
+                                <td class="font-medium">#{{ order.id }}</td>
+                                <td>{{ order.created_at|date:"Y-m-d H:i" }}</td>
+                                <td>{{ order.user.username }}</td>
+                                <td>{{ order.items.count }}</td>
+                                <td class="font-medium">₹{{ order.total_amount }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center text-gray-500">No orders found for the selected period.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        
+            <script>
+                function toggleDateInputs(value) {
+                    const dateInputs = document.getElementById('dateInputs');
+                    dateInputs.style.display = value === 'custom' ? 'block' : 'none';
+                }
+        
+                // Initialize sales chart
+                const ctx = document.getElementById('salesChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                        datasets: [{
+                            label: 'Sales',
+                            data: [12, 19, 3, 5, 2, 3],
+                            borderColor: '#6366f1',
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            }
+                        }
+                    }
+                });
+            </script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('salesChart').getContext('2d');
+    
+    const salesData = JSON.parse('{{ grouped_sales|safe }}');
+    
+    const labels = salesData.map(item => {
+        const date = new Date(item.period);
+        const reportType = '{{ report_type }}';
+        
+        if (reportType === 'yearly') {
+            return date.toLocaleDateString('default', { month: 'short', year: 'numeric' });
+        } else {
+            return date.toLocaleDateString('default', { month: 'short', day: 'numeric' });
+        }
+    });
+
+    const values = salesData.map(item => parseFloat(item.total_sales));
+
+    const config = {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Sales',
+                data: values,
+                borderColor: 'rgb(99, 102, 241)',
+                backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                tension: 0.3,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return '₹' + parseFloat(context.raw).toLocaleString('en-IN');
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '₹' + value.toLocaleString('en-IN');
+                        }
+                    },
+                    grid: {
+                        borderDash: [2, 2],
+                        drawBorder: false
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false,
+                        drawBorder: false
+                    },
+                    ticks: {
+                        maxRotation: 45,
+                        minRotation: 45
+                    }
+                }
+            }
+        }
+    };
+
+    const salesChart = new Chart(ctx, config);
+
+    const filterForm = document.querySelector('form.filters');
+    if (filterForm) {
+        filterForm.addEventListener('submit', function() {
+        });
+    }
+});
+</script>
+
+            
+    </div>
+
+
+    <script data-cfasync="false"
+    src="{% static 'admin_assets/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js' %}"></script>
+<script src="{% static 'admin_assets/js/jquery-3.6.0.min.js' %}"></script>
+
+<script src="{% static 'admin_assets/js/feather.min.js' %}"></script>
+<script src="{% static 'admin_assets/js/jquery.slimscroll.min.js' %}"></script>
+<script src="{% static 'admin_assets/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'admin_assets/js/dataTables.bootstrap4.min.js' %}"></script>
+
+<script src="{% static 'admin_assets/js/bootstrap.bundle.min.js' %}"></script>
+
+<script src="{% static 'admin_assets/plugins/select2/js/select2.min.js' %}"></script>
+
+<script src="{% static 'admin_assets/js/moment.min.js' %}"></script>
+<script src="{% static 'admin_assets/js/bootstrap-datetimepicker.min.js' %}"></script>
+
+
+
+<script src="{% static 'admin_assets/js/script.js' %}"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script>
+    function showToast(message, type) {
+      let backgroundColor = "#000";
+      switch(type) {
+        case 'success':
+          backgroundColor = "#28a745";
+          break;
+        case 'error':
+          backgroundColor = "#dc3545";
+          break;
+        case 'warning':
+          backgroundColor = "#ffc107";
+          break;
+        case 'info':
+          backgroundColor = "#17a2b8";
+          break;
+      }
+  
+      Toastify({
+        text: message,
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        style: {
+          background: backgroundColor,
+        },
+      }).showToast();
+    }
+  
+    // For Django messages
+    {% if messages %}
+      {% for message in messages %}
+        showToast("{{ message }}", "{{ message.tags }}");
+      {% endfor %}
+    {% endif %}
+  </script>
+</body>
+
+</html>

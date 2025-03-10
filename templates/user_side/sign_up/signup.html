@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <title>Signup Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{% static 'admin_assets/img/Starlogo.png' %}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    
+    <style media="screen">
+        *,
+        *:before,
+        *:after {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 15px;
+            background-color: #ffffff;
+        }
+        
+        .svg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        form {
+            width: 100%;
+            max-width: 370px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        form * {
+            font-family: 'Poppins', sans-serif;
+            color: #000000;
+            letter-spacing: 0.5px;
+            outline: none;
+            border: none;
+        }
+        
+        form h3 {
+            font-size: 28px;
+            font-weight: 500;
+            line-height: 1.2;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-top: 10px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        input {
+            display: block;
+            height: 40px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 6px;
+            padding: 0 10px;
+            margin-top: 6px;
+            font-size: 14px;
+            font-weight: 300;
+            border: 1px solid rgb(128, 128, 128);
+        }
+        
+        button {
+            margin-top: 20px;
+            width: 100%;
+            background-color: #b52a2a;
+            color: #ffffff;
+            padding: 10px 0;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 7px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+        }
+        
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .log_logo {
+            width: 70px;
+            height: auto;
+        }
+        
+        #msg {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .toastify {
+            padding: 12px 20px;
+            color: white;
+            display: inline-block;
+            box-shadow: 0 3px 6px -1px rgba(0, 0, 0, 0.12);
+            background-color: #333;
+            position: fixed;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            max-width: calc(50% - 20px);
+            z-index: 2147483647;
+        }
+        
+        .toastify.on {
+            opacity: 1;
+        }
+        
+        .password-container {
+            position: relative;
+            width: 100%;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .password-container input[type="password"],
+        .password-container input[type="text"] {
+            padding-right: 35px;
+        }
+        
+        /* Media Queries for Responsiveness */
+        @media screen and (max-width: 480px) {
+            form {
+                padding: 15px;
+            }
+            
+            .log_logo {
+                width: 60px;
+            }
+            
+            label {
+                font-size: 14px;
+                margin-top: 8px;
+            }
+            
+            input {
+                height: 36px;
+                font-size: 13px;
+            }
+            
+            button {
+                padding: 8px 0;
+                font-size: 15px;
+            }
+            
+            #msg {
+                font-size: 13px;
+                margin-top: 12px;
+            }
+        }
+        
+        /* Toast notifications for smaller screens */
+        @media screen and (max-width: 768px) {
+            .toastify {
+                max-width: 90% !important;
+                left: 5% !important;
+                right: 5% !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="svg-container"></div>
+    
+    <form action="{% url 'SignupPage' %}" method="post">
+        {% csrf_token %}
+        
+        <div class="logo-container">
+            <a href="{% url 'home' %}">
+                <img class="log_logo" src="{% static 'user_assets/images/logo.png' %}" alt="Logo">
+            </a>
+        </div>
+        
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" placeholder="Enter Username" 
+            value="{{ form_data.username }}" required>
+
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" placeholder="Enter Email" 
+            value="{{ form_data.email }}" required>
+
+        <label for="password1">Password</label>
+        <div class="password-container">
+            <input type="password" name="password1" id="password1" placeholder="Enter Password" required>
+            <i class="fas fa-eye toggle-password" data-target="password1"></i>
+        </div>
+
+        <label for="password2">Confirm Password</label>
+        <div class="password-container">
+            <input type="password" name="password2" id="password2" placeholder="Confirm Password" required>
+            <i class="fas fa-eye toggle-password" data-target="password2"></i>
+        </div>
+
+        <button type="submit">Sign Up</button>
+        <p id="msg">Already have an account? <a href="{% url 'login' %}" style="color:#b52a2a;">Login</a></p>
+    </form>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleButtons = document.querySelectorAll('.toggle-password');
+            
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const passwordInput = document.getElementById(targetId);
+                    
+                    if (passwordInput.type === 'password') {
+                        passwordInput.type = 'text';
+                        this.classList.remove('fa-eye');
+                        this.classList.add('fa-eye-slash');
+                    } else {
+                        passwordInput.type = 'password';
+                        this.classList.remove('fa-eye-slash');
+                        this.classList.add('fa-eye');
+                    }
+                });
+            });
+        });
+        
+        function showToast(message, type) {
+            let backgroundColor = "#000";
+            switch(type) {
+                case 'success':
+                    backgroundColor = "#28a745";
+                    break;
+                case 'error':
+                    backgroundColor = "#dc3545";
+                    break;
+                case 'warning':
+                    backgroundColor = "#ffc107";
+                    break;
+                case 'info':
+                    backgroundColor = "#17a2b8";
+                    break;
+            }
+            
+            Toastify({
+                text: message,
+                duration: 3000,
+                gravity: "top",
+                position: window.innerWidth <= 768 ? "center" : "right",
+                style: {
+                    background: backgroundColor,
+                },
+            }).showToast();
+        }
+        
+        // For Django messages
+        {% if messages %}
+            {% for message in messages %}
+                showToast("{{ message }}", "{{ message.tags }}");
+            {% endfor %}
+        {% endif %}
+    </script>
+</body>
+</html>

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'admin_assets\img\Starlogo.png' %}">
+    <title>My Orders</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    
+
+    <style>
+        :root {
+            --primary-color: #D33C3C;
+            --primary-color-light: #FF6B6B;
+            --primary-color-dark: #A52A2A;
+        }
+
+        body {
+            background-color: #f9fafb;
+        }
+
+        .bg-primary {
+            background-color: var(--primary-color);
+        }
+
+        .text-primary {
+            color: var(--primary-color);
+        }
+
+        .border-primary {
+            border-color: var(--primary-color);
+        }
+
+        .hover\:bg-primary-light:hover {
+            background-color: var(--primary-color-light);
+        }
+
+        .order-card {
+            transition: all 0.3s ease;
+        }
+
+        .order-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(211, 60, 60, 0.1);
+        }
+
+             /* Breadcrumb Specific Styles */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .breadcrumb-item a {
+            color: var(--primary-color);
+            text-decoration: none !important;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-item a:hover {
+            color: var(--primary-color-dark);
+        }
+
+        .breadcrumb-item.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .breadcrumb-divider {
+            color: #9ca3af;
+            margin: 0 0.25rem;
+        }
+        :root {
+            --primary-color:#b52a2a;
+            --primary-light: #fdf2f2;
+            --primary-dark: #b33333;
+        }
+        
+        .bg-custom-primary {
+            background-color: var(--primary-color) !important;
+        }
+        
+        .text-custom-primary {
+            color: var(--primary-color) !important;
+        }
+        
+        .border-custom-primary {
+            border-color: var(--primary-color) !important;
+        }
+        
+        .btn-custom-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+        }
+        
+        .btn-custom-primary:hover {
+            background-color: var(--primary-dark);
+            color: white;
+        }
+        
+        .btn-outline-custom-primary {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-outline-custom-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .order-status-pill {
+            font-size: 0.85rem;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+        }
+        
+        .hover-lift {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(211, 60, 60, 0.1) !important;
+        }
+        
+        .custom-icon-bg {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+        }
+        
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+           <!-- Breadcrumb Navigation -->
+           <nav class="breadcrumb mb-6">
+            <div class="breadcrumb-item">
+                <a href="{% url 'home' %}" class="hover:underline">
+                    <i class="bi bi-house-fill mr-1"></i>
+                    Home
+                </a>
+                <span class="breadcrumb-divider">/</span>
+            </div>
+            <div class="breadcrumb-item">
+                <a href="{% url "home" %}" class="hover:underline">
+                    <i class="bi bi-grid-fill mr-1"></i>
+                    My Account
+                </a>
+                <span class="breadcrumb-divider">/</span>
+            </div>
+            <div class="breadcrumb-item active">
+                <i class="bi bi-bag-fill mr-1"></i>
+                My Orders
+            </div>
+        </nav>
+        <!-- Page Header -->
+        <header class="mb-10 text-center">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4" style="color: var(--primary-color)">My Orders</h1>
+            <p class="text-gray-600 text-lg">Track and manage your recent purchases</p>
+        </header>
+        {% comment %} <div class="modal-body">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No messages to display.</p>
+            {% endif %}
+        </div> {% endcomment %}
+        
+        {% if orders_with_items %}
+
+        <!-- Orders Overview -->
+        <div class="grid md:grid-cols-3 gap-6 mb-10">
+            <!-- Total Orders Card -->
+            <div class="bg-white shadow-md rounded-xl p-6 text-center order-card">
+                <div class="mb-4">
+                    <i class="bi bi-bag-check-fill text-5xl" style="color: var(--primary-color)"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Total Orders</h3>
+                <p class="text-3xl font-bold" style="color: var(--primary-color)">{{ orders_with_items|length }}</p>
+            </div>
+            
+            <!-- Pending Orders Card -->
+            <div class="bg-white shadow-md rounded-xl p-6 text-center order-card">
+                <div class="mb-4">
+                    <i class="bi bi-clock-fill text-5xl text-yellow-600"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Pending Orders</h3>
+                <p class="text-3xl font-bold text-yellow-700">{{ pending_orders_count }}</p>
+            </div>
+            
+
+            <!-- Completed Orders Card -->
+            <div class="bg-white shadow-md rounded-xl p-6 text-center order-card">
+                <div class="mb-4">
+                    <i class="bi bi-check-circle-fill text-5xl text-green-600"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Completed Orders</h3>
+                <p class="text-3xl font-bold text-green-700">{{ delivery_orders_count }}</p>
+            </div>
+
+        </div>
+
+
+        <!-- Orders List -->
+        <div class="space-y-6">
+            {% for order in orders_with_items %}
+            <!-- Single Order Card -->
+            <div class="bg-white shadow-md rounded-xl p-6 order-card">
+                <!-- Order Header -->
+                <div class="flex flex-wrap justify-between items-center mb-6 pb-4 border-b">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-2">
+                            <h2 class="text-xl font-semibold text-gray-900">
+                               #{{ order.order.id }}
+                            </h2>
+                            <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                                {{ order.order.order_status }}
+                            </span>
+                        </div>
+                        <p class="text-gray-600">
+                            <i class="bi bi-calendar3 mr-2"></i>
+                            {{ order.order.created_at|date:"F d, Y" }}
+                        </p>
+                    </div>
+
+                    <!-- Order Actions -->
+                    <div class="flex space-x-3">
+                        <form method="POST" action="{% url 'order_app:order_detail' order_id=order.order.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-light transition-colors">
+                                <i class="bi bi-eye mr-2"></i>View Details
+                            </button>
+                        </form>
+                        {% if order.order.order_status == 'PROCESSING' or order_with_items.order.order_status == 'SHIPPED' %}
+
+                        <form method="POST" action="{% url 'order_app:cancel_order' order.order.id %}" 
+                        >
+                        {% csrf_token %}
+                        <button type="submit" class="px-4 py-2 border border-primary text-primary rounded-lg hover:bg-red-50 transition-colors">
+                            <i class="bi bi-x-circle mr-2"></i>Cancel Order
+                        </button>
+                    </form>
+                    {% endif %}
+
+                    </div>
+                </div>
+
+                <!-- Order Details -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Order Items -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Order Items</h3>
+                        <ul class="space-y-3">
+                            {% for item in order.items %}
+                            <li class="flex justify-between items-center">
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-gray-600 font-medium">{{ item.quantity }}×</span>
+                                    <span class="text-gray-800">{{ item.product.title }}</span>
+                                </div>
+                                <span class="text-gray-600">{{ item.price }}</span>
+                            </li>
+                            {% endfor %}
+
+                            {% comment %} <li class="flex justify-between items-center">
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-gray-600 font-medium">1×</span>
+                                    <span class="text-gray-800">Smartphone Stand</span>
+                                </div>
+                                <span class="text-gray-600">₹499</span>
+                            </li> {% endcomment %}
+                        </ul>
+                    </div>
+
+                    <!-- Order Total -->
+                    <div class="md:text-right">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Order Total</h3>
+                        <div class=" rounded-lg p-4">
+                            <p class="text-3xl font-bold" style="color: var(--primary-color)">₹{{ order.order.total_amount}}</p>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <!-- Empty State (when no orders) -->
+            <div class="text-center bg-white rounded-lg p-8 fade-in">
+                <div class="inline-block p-3 bg-gray-100 rounded-full mb-4">
+                    <i class="bi bi-bag text-4xl text-gray-500"></i>
+                </div>
+                <h2 class="text-xl font-medium text-gray-800 mb-2">No Orders Yet</h2>
+                <p class="text-gray-600 mb-6">Start shopping to see your orders here</p>
+                <a href="{% url 'shop' %}" class="inline-block px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-light transition-colors">
+                    <i class="bi bi-cart mr-2"></i>Browse Products
+                </a>
+            </div>
+            
+            {% endif %} 
+        </div>
+        
+    </div>
+    <div class="fixed bottom-4 right-4 z-50 no-print transition-transform duration-300 ease-in-out" id="trackOrderButton">
+        <a href="{% url 'order_app:track_order' %}" 
+           class="btn btn-custom-primary rounded-full shadow-lg p-3 transform hover:scale-105 transition-all"
+           data-bs-toggle="tooltip" 
+           data-bs-placement="left" 
+           title="Track Order">
+            <i class="bi bi-truck text-2xl"></i>
+        </a>
+    </div>
+
+    <script>
+        function toggleEmptyState() {
+            const orderList = document.querySelector('.space-y-6 > div:first-child');
+            const emptyState = document.getElementById('empty-state');
+            
+            // Uncomment and modify as needed for dynamic showing/hiding
+            // if (orderList.children.length === 0) {
+            //     orderList.style.display = 'none';
+            //     emptyState.style.display = 'block';
+            // } else {
+            //     orderList.style.display = 'block';
+            //     emptyState.style.display = 'none';
+            // }
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const trackButton = document.getElementById('trackOrderButton');
+            let lastScrollTop = 0;
+    
+            window.addEventListener('scroll', function() {
+                let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+                
+                if (currentScroll > lastScrollTop && currentScroll > 200) {
+                    // Scrolling down and past 200px
+                    trackButton.classList.remove('translate-y-full');
+                    trackButton.classList.add('translate-y-0');
+                } else {
+                    // Scrolling up or above 200px
+                    trackButton.classList.remove('translate-y-0');
+                    trackButton.classList.add('translate-y-full');
+                }
+                
+                lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+            });
+        });
+    </script>
+    
+</body>
+</html>

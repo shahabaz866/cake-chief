@@ -1,0 +1,1068 @@
+{% extends 'user_side/base.html' %}
+{% block content %}
+{% load static %}
+{% load temp_tags %}
+{% block extra_css %}
+
+{% load humanize %}
+<style>
+  
+  .move-down {
+    margin-top: 57px; /* Adjust the value as needed */
+  }
+  //search//
+  .search-container {
+    margin-bottom: 110px !important; 
+    width: 100%;
+}
+
+.search-wrapper {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.search-input {
+    width: 100%;
+    height:50px;
+    padding: 12px 45px 12px 20px;
+    border: 2px solid #dee2e6;
+    border-radius: 25px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color:#b52a2a;
+    box-shadow: 0 3px 8px rgba(211, 60, 60, 0.1);
+}
+
+.search-button {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background:#b52a2a;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.search-button:hover {
+    background: #b33232;
+    transform: translateY(-50%) scale(1.05);
+}
+
+.search-icon {
+    font-size: 0.9rem;
+}
+//end //search//
+
+
+  .filter-container {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+  }
+
+  .filter-header {
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+      background-color: #f8f9fa;
+  }
+
+  .filter-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #333;
+      margin: 0;
+  }
+
+  .filter-list {
+      list-style: none;
+      padding: 0.5rem 0;
+      margin: 0;
+  }
+
+  .filter-item {
+      padding: 0;
+      margin: 0;
+  }
+
+  .filter-link {
+      display: flex;
+      padding: 0.75rem 1rem;
+      color: #555;
+      text-decoration: none;
+      transition: all 0.2s ease;
+  }
+
+  .filter-link:hover {
+      background-color: #f8f9fa;
+      color: #000;
+  }
+
+  .flavor-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 8px;
+      align-self: center;
+  }
+
+  .flavor-name {
+      flex-grow: 1;
+  }
+
+  .flavor-count {
+      color: #888;
+      font-size: 0.9rem;
+  }
+
+  .filter-link:hover .flavor-count {
+      color: #555;
+  }
+  .category-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+
+.category-header {
+    padding: 1rem;
+    border-bottom: 1px solid #b52a2a;
+    background-color:#b52a2a;
+    border-radius: 8px;
+}
+
+.category-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #ffff;
+    margin: 0;
+}
+
+.category-list {
+    list-style: none;
+    padding: 0.5rem 0;
+    margin: 0;
+}
+
+.category-item {
+    padding: 0;
+    margin: 0;
+}
+
+.category-link {
+    display: flex;
+    padding: 0.75rem 1rem;
+    color: #555;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    align-items: center;
+}
+
+.category-link:hover {
+    background-color: #f8f9fa;
+    color: #000;
+}
+
+.category-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    opacity: 0.7;
+}
+
+.category-name {
+    flex-grow: 1;
+}
+
+.category-count {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+.category-link:hover .category-count {
+    color: #555;
+}
+
+/* Custom icons for each category */
+/* Category Icon Base Styles */
+[class^="icon-"] {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 12px;
+    transition: all 0.3s ease;
+}
+
+/* Wedding Category */
+.icon-Wedding::before {
+    content: "👰";
+    background: linear-gradient(45deg, #fff5f7, #ffd1dc);
+    box-shadow: 0 2px 10px rgba(255, 182, 193, 0.3);
+}
+.icon-Wedding:hover::before {
+    content: "💑";
+    transform: scale(1.1);
+}
+
+/* Birthday Category */
+.icon-Birthday::before {
+    content: "🎂";
+    background: linear-gradient(45deg, #f0f9ff, #ccf2fe);
+    box-shadow: 0 2px 10px rgba(135, 206, 250, 0.3);
+}
+.icon-Birthday:hover::before {
+    content: "🎉";
+    transform: scale(1.1);
+}
+
+/* Anniversary Category */
+.icon-Anniversary::before {
+    content: "💑";
+    background: linear-gradient(45deg, #fff0f7, #ffd6e7);
+    box-shadow: 0 2px 10px rgba(255, 182, 193, 0.3);
+}
+.icon-Anniversary:hover::before {
+    content: "💝";
+    transform: scale(1.1);
+}
+
+/* Kids Category */
+.icon-Kids::before {
+    content: "👶";
+    background: linear-gradient(45deg, #f0fff4, #c6f6d5);
+    box-shadow: 0 2px 10px rgba(72, 187, 120, 0.3);
+}
+.icon-Kids:hover::before {
+    content: "🎈";
+    transform: scale(1.1);
+}
+
+/* Fruit Category */
+.icon-Fruit::before {
+    content: "🍓";
+    background: linear-gradient(45deg, #fff5f5, #fed7d7);
+    box-shadow: 0 2px 10px rgba(245, 101, 101, 0.3);
+}
+.icon-Fruit:hover::before {
+    content: "🍎";
+    transform: scale(1.1);
+}
+
+/* Fondant Category */
+.icon-Fondant::before {
+    content: "🍰";
+    background: linear-gradient(45deg, #fff5f7, #fed7e2);
+    box-shadow: 0 2px 10px rgba(246, 173, 85, 0.3);
+}
+.icon-Fondant:hover::before {
+    content: "🧁";
+    transform: scale(1.1);
+}
+
+/* Red Velvet Category */
+.icon-RedVelvet::before {
+    content: "🍫";
+    background: linear-gradient(45deg, #742f37, #5c1f28);
+    box-shadow: 0 2px 10px rgba(116, 47, 55, 0.3);
+}
+.icon-RedVelvet:hover::before {
+    content: "❤️";
+    transform: scale(1.1);
+}
+
+/* Chocolate Category */
+.icon-Chocolate::before {
+    content: "🍫";
+    background: linear-gradient(45deg, #795548, #5d4037);
+    box-shadow: 0 2px 10px rgba(121, 85, 72, 0.3);
+}
+.icon-Chocolate:hover::before {
+    content: "🎂";
+    transform: scale(1.1);
+}
+
+/* Premium Category */
+.icon-Premium::before {
+    content: "👑";
+    background: linear-gradient(45deg, #ffd700, #ffa500);
+    box-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+}
+.icon-Premium:hover::before {
+    content: "✨";
+    transform: scale(1.1);
+}
+
+/* Animation for all category icons */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Common hover effects for all icons */
+[class^="icon-"]:hover {
+    animation: pulse 1s infinite;
+    cursor: pointer;
+}
+
+/* Additional styles for the category container */
+.category-link {
+    background: white;
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin: 5px 0;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.category-link:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(to right, white, #f8f9fa);
+}
+
+/* Category count badge */
+.category-count {
+    background: #f8f9fa;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+.category-link:hover .category-count {
+    background: #e9ecef;
+    color: #333;
+}
+
+/* Active category styles */
+.category-link.active {
+    background: linear-gradient(to right, #ff6b6b, #ff8787);
+    color: white;
+}
+
+.category-link.active .category-count {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+
+.hover-shadow:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+}
+
+.transition {
+  transition: all .3s ease;
+}
+/* Price Slider Styles */
+.price-filter-content {
+  padding: 0.5rem 0;
+}
+
+.price-slider {
+  margin: 20px 0;
+}
+
+.price-display {
+  margin-top: 15px;
+}
+
+.price-display-text {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+  padding: 0;
+}
+
+/* jQuery UI Slider Custom Styles */
+.ui-slider-horizontal {
+  height: 4px;
+  background: #e9ecef;
+  border: none;
+  margin: 20px 0;
+}
+
+.ui-slider .ui-slider-handle {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: #b52a2a;
+  top: -6px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.ui-slider .ui-slider-range {
+  background:#D33C3C;
+}
+.slider-range{
+  background:#D33C3C;
+  color:#D33C3C;
+}
+
+/* Match your existing container styles */
+.category-container {
+  border: 1px solid #dee2e6;
+  padding: 1.5rem;
+  border-radius: 0.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.category-header {
+  margin-bottom: 1rem;
+}
+
+.category-title {
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+.btn:hover {
+  color: #b52a2a;
+  background:#D33C3C;
+
+}
+
+.dropdown-toggle:hover {
+  color:  #000;
+}
+/* New cart styles */
+.cart-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  padding: 10px;
+}
+
+.cart-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color:#b52a2a;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.cart-button:hover {
+  background-color: #b33232;
+  transform: translateY(-2px);
+}
+
+.cart-count {
+  background-color: white;
+  color:#b52a2a;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+/* Adjust main content to account for fixed cart */
+.site-section {
+  padding-top: 80px;
+}
+.site-block-27 ul li a {
+  color: #333; /* Default text color for pagination links */
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: all 0.3s ease; /* Smooth transition */
+}
+
+.site-block-27 ul li a:hover {
+  color: white; /* Text color on hover */
+  background-color: #ff6b6b; /* Attractive hover color */
+  border-color: #ff6b6b; /* Border color matching the background */
+  transform: scale(1.1); /* Slightly enlarge on hover */
+}
+
+.site-block-27 ul li span {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  color: #666;
+}
+
+.site-block-27 ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+#dropdownMenuReference:focus,
+#dropdownMenuReference:active,
+#dropdownMenuOffset:focus,
+#dropdownMenuOffset:active {
+    background-color: #b52a2a !important;
+    box-shadow: none !important; /* Removes the outline shadow */
+}
+.price-filter-container {
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  max-width: 400px;
+  margin: 20px auto;
+}
+
+.price-filter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.price-input-group {
+  display: flex;
+  gap: 10px;
+}
+
+.price-input-wrapper {
+  flex: 1;
+  position: relative;
+}
+
+.price-input-wrapper::before {
+  content: "₹";
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+}
+
+.price-input {
+  width: 100%;
+  padding: 12px 12px 12px 25px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.3s;
+  outline: none;
+}
+
+.price-input:focus {
+  border-color: #D33C3C;
+  box-shadow: 0 0 0 2px rgba(211, 60, 60, 0.1);
+}
+
+.price-input::placeholder {
+  color: #999;
+}
+
+.filter-button {
+  background-color: #D33C3C;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.filter-button:hover {
+  background-color: #b33232;
+}
+
+.filter-button:active {
+  transform: translateY(1px);
+}
+{% comment %} --------------- {% endcomment %}
+.product-actions {
+  display: flex;
+  justify-content: flex-end;  /* Move items to the end (right side) */
+  align-items: center;        /* Align items vertically */
+}
+
+.wishlist-btn {
+  display: flex;             /* Flexbox for centering the icon */
+  align-items: center;       /* Vertically align the icon */
+  justify-content: center;   /* Horizontally align the icon */
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.wish-btn i {
+  font-size: 24px;           /* Icon size */
+  color: #ff4444;            /* Red color for the heart */
+}
+.wish-btn:hover{
+background-color:#ffff;
+}
+
+.wishlist-btn:hover {
+  transform: scale(1.1);  
+  background-color: transparent;
+  /* Slightly enlarge the heart on hover */
+}
+
+.wishlist-btn:active {
+  transform: scale(0.95);    /* Shrink the heart when clicked */
+}
+{% comment %} --------------------------- {% endcomment %}
+/* Stock Indicator Styles */
+  .stock-indicator {
+    margin: 0.5rem 0;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .stock-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+  }
+
+  .stock-text {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .stock-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    display: none; /* Hidden by default, shown via JS */
+  }
+
+  .stock-bar-container {
+    width: 100%;
+    height: 0.5rem;
+    background-color: #e5e7eb;
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+
+  .stock-bar {
+    height: 100%;
+    border-radius: 9999px;
+    transition: width 300ms ease-in-out;
+  }
+
+  /* Stock Status Variants */
+  .stock-indicator[data-status="in-stock"] .stock-text {
+    color:#b52a2a;
+  }
+
+  .stock-indicator[data-status="in-stock"] .stock-bar {
+    background-color:#b52a2a;
+  }
+
+  .stock-indicator[data-status="low-stock"] .stock-text {
+    color: #d97706;
+  }
+
+  .stock-indicator[data-status="low-stock"] .stock-bar {
+    background-color: #d97706;
+  }
+
+  .stock-indicator[data-status="low-stock"] .stock-badge {
+    display: inline-block;
+    background-color: #fef3c7;
+    color: #d97706;
+  }
+
+  .stock-indicator[data-status="critical-stock"] .stock-text {
+    color: #dc2626;
+  }
+
+  .stock-indicator[data-status="critical-stock"] .stock-bar {
+    background-color: #dc2626;
+  }
+
+  .stock-indicator[data-status="critical-stock"] .stock-badge {
+    display: inline-block;
+    background-color: #fee2e2;
+    color: #dc2626;
+  }
+
+  .stock-indicator[data-status="out-of-stock"] .stock-text {
+    color: #dc2626;
+  }
+
+  .stock-indicator[data-status="out-of-stock"] .stock-bar {
+    background-color: #dc2626;
+    width: 0 !important;
+  }
+
+  @media (max-width: 768px) {
+    .stock-indicator {
+      max-width: 100%;
+    }
+  }
+</style>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+
+{% endblock  %}
+<div class="cart-container">
+  <a href="{% url "cart_app:cart" %}" class="cart-button">
+    <i class="fas fa-shopping-cart"></i>
+  <span class="cart-count" id="cart-count">{{ request.session.cart_count|default:0 }}</span>
+  </a>
+</div>
+<!-- Breadcrumb Navigation -->
+<div class="bg-light py-3">
+  <div class="container">
+    <div class="row" >
+      <div class="col-md-12 mb-0">
+        <a href="{% url 'home' %}" style="color: #D33C3C; text-decoration: none;">
+          <i class="fas fa-home" ></i> Home
+      </a>        <span class="mx-2 mb-0">/</span>
+        <strong class="text-black">Shop</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Shop Section -->
+<div class="site-section" style="padding-top:0px">
+  <div class="container">
+    <div class="row mb-5">
+
+      <!-- Shop List Section -->
+      <div class="col-md-9 order-2">
+        <div class="row" >
+          <div class="col-md-12 ">
+            <div class="float-md-left mb-4">
+              {% comment %} <h2 class="text-black h5">Shop All</h2> {% endcomment %}
+            </div>
+            
+            <div class="d-flex align-items-center">
+              <div class="search-container flex-grow-1 mr-3 mb-3">
+                    <form action="" method="GET" class="search-wrapper mt-3">
+                        <input type="text" 
+                               name="q" 
+                               class="search-input" 
+                               placeholder="Search for cakes, flavors, or categories..."
+                               value="{{ request.GET.q|default:'' }}">
+                        <button type="submit" class="search-button">
+                            <i class="fas fa-search search-icon"></i>
+                        </button>
+                    </form>
+                </div>
+             
+
+              <!-- Reference Dropdown -->
+              <div class="btn-group">
+                <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" id="dropdownMenuReference" data-toggle="dropdown">
+                  Sort By
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
+                    <a class="dropdown-item" href="?sort=latest">Latest</a>
+                    <a class="dropdown-item" href="?sort=name_asc">Name, A to Z</a>
+                    <a class="dropdown-item" href="?sort=name_desc">Name, Z to A</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="?sort=price_low">Price, low to high</a>
+                    <a class="dropdown-item" href="?sort=price_high">Price, high to low</a>
+                </div>
+            </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="container ">
+          
+          {% if not products %}
+          <div class="text-center py-5">
+            <div class="mb-4">
+              <i class="fas fa-search fa-3x text-muted"></i>
+            </div>
+            <h3 class="mb-3">No Products Found</h3>
+            
+            {% if request.GET.q %}
+              <p class="text-muted mb-4">We couldn't find any products matching "{{ request.GET.q }}"</p>
+            {% elif request.GET.min_price or request.GET.max_price %}
+              <p class="text-muted mb-4">No products found in the selected price range</p>
+            {% else %}
+              <p class="text-muted mb-4">No products available in this category</p>
+            {% endif %}
+            
+            <div class="mb-4">
+              <a href="{% url 'shop' %}" class="btn btn-outline-danger">
+                <i class="fas fa-undo mr-2"></i>Clear All Filters
+              </a>
+            </div>
+            
+            <!-- Popular Categories Section -->
+            <div class="mt-5">
+              <h4 class="mb-4">Browse Popular Categories</h4>
+              <div class="row justify-content-center">
+                {% for category in categories|slice:":4" %}
+                  <div class="col-6 col-md-3 mb-3">
+                    <a href="{% url 'shop_by_category' category.id %}" class="text-decoration-none">
+                      <div class="card h-100 border-0 shadow-sm hover-shadow">
+                        <div class="card-body text-center">
+                          <i class="fas fa-birthday-cake fa-2x mb-2 text-danger"></i>
+                          <h6 class="mb-0 text-dark">{{ category.name }}</h6>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+            <div class="mt-5">
+              <h4 class="mb-4">Browse Popular flavour</h4>
+              <div class="row justify-content-center">
+                {% for flavor in flavours|slice:":4" %}
+                  <div class="col-6 col-md-3 mb-3">
+                    <a href="{% url 'flavor_filter' flavor.id %}" class="text-decoration-none">
+                      <div class="card h-100 border-0 shadow-sm hover-shadow">
+                        <div class="card-body text-center">
+                          <i class="fas fa-birthday-cake fa-2x mb-2 text-danger"></i>
+                          <h6 class="mb-0 text-dark">{{ flavor.name }}</h6>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        {% else %}
+      
+          <div class="row g-4">
+            {% for product in products %}
+            <div class="col-sm-6 col-lg-3">
+              <div class="card h-100 shadow-sm hover-shadow transition">
+                <div class="position-relative">
+                  <a href="{% url 'product_detail' product.id %}">
+                    <img src="{{ product.image.url }}" 
+                         class="card-img-top"
+                         alt="{{ product.title }}"
+                         style="object-fit: cover; height: 300px;">
+                  </a>
+                  {% if product.on_sale %}
+                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">Sale!</span>
+                  {% endif %}
+                </div>
+            
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title">
+                    <a href="{% url 'product_detail' product.id %}" class="text-decoration-none text-danger">
+                      {{ product.title }}
+                    </a>
+                  </h5>
+            
+
+
+                  
+                  <!-- Price Information -->
+                  <div class="mt-auto">
+                    <span class="h5 mb-0">
+                      {% if product.on_sale and product.sale_price %}
+                        <del class="text-muted small">₹{{ product.price }}</del>
+                        <span class="text-danger">₹{{ product.sale_price }}</span>
+                      {% else %}
+                        ₹{{ product.variants.first.price }}
+                      {% endif %}
+                    </span>
+                  </div>
+                  <a
+                  href="{% url 'wishlist_app:add_to_wishlist' product.id variant.id|default:0  %}"
+                  class="btn btn-outline-danger btn-lg wishlist-btn position-absolute top-0 start-0 m-2"
+                  data-product-id="{{ product.id }}"
+                >
+                  <i class="far fa-heart"></i>
+                </a>
+                
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+            
+          </div>
+          {% endif %}
+      </div>
+
+     
+       <!-- Pagination -->
+       {% if products.has_other_pages %}
+       <div class="row" data-aos="fade-up">
+         <div class="col-md-12 text-center">
+           <div class="site-block-27" style= "margin-top: 30px;">
+             <ul>
+               {% if products.has_previous %}
+                 <li><a href="?page={{ products.previous_page_number }}">&lt;</a></li>
+               {% else %}
+                 <li><span>&lt;</span></li>
+               {% endif %}
+     
+               {% for i in paginator.page_range %}
+                 {% if products.number == i %}
+                   <li><span>{{ i }}</span></li>
+                 {% else %}
+                   <li><a href="?page={{ i }}">{{ i }}</a></li>
+                 {% endif %}
+               {% endfor %}
+     
+               {% if products.has_next %}
+                 <li><a href="?page={{ products.next_page_number }}">&gt;</a></li>
+               {% else %}
+                 <li><span>&gt;</span></li>
+               {% endif %}
+             </ul>
+           </div>
+         </div>
+       </div>
+     {% endif %}
+      </div>
+
+      <!-- Sidebar Filters Section -->
+      <div class="col-md-3 order-1 mb-5 mb-md-0 move-down ">
+        <div class="category-container" style="margin-top:20px">
+          <div class="category-header">
+              <h3 class="category-title">Categories</h3>
+          </div>
+          <ul class="category-list">
+              {% for category in categories %}
+              <li class="category-item">
+                  <a href="{% url 'shop_by_category' category.id %}" class="category-link">
+                      <!-- Apply icon class using the category name -->
+                      <span class="category-icon icon-{{ category.name|title }}"></span>
+                      <span class="category-name">{{ category.name }}</span>
+                      <span class="category-count">({{ category.products.count }})</span>
+                  </a>
+              </li>
+              {% endfor %}
+          </ul>
+      </div>
+
+
+      <div class="category-container">
+        <div class="category-header">
+            <h3 class="category-title">Flavour</h3>
+        </div>
+        <ul class="filter-list">
+          {% for flavor in flavours %}
+          <li class="filter-item">
+              <a href="{% url 'flavor_filter' flavor.id %}" class="filter-link">
+                  <span class="flavor-dot" style="background-color: {{ flavor.color }};"></span>
+                  <span class="flavor-name">{{ flavor.name }}</span>
+                  <span class="flavor-count">({{ flavor.products.count }})</span>
+              </a>
+          </li>
+          {% endfor %}
+      </ul>
+            
+    </div>
+
+       
+        
+
+
+
+  <form method="GET" action="{% url 'shop' %}" class="price-filter-form">
+    <div class="price-input-group">
+        <div class="price-input-wrapper">
+            <input type="number" 
+                   name="min_price" 
+                   value="{{ min_price }}" 
+                   placeholder="Min Price" 
+                   class="price-input"
+                   min="0"
+                   step="0.01">
+        </div>
+        <div class="price-input-wrapper">
+            <input type="number" 
+                   name="max_price" 
+                   value="{{ max_price }}" 
+                   placeholder="Max Price" 
+                   class="price-input"
+                   min="0"
+                   step="0.01">
+        </div>
+    </div>
+    <button type="submit" class="filter-button mb-3 ">Apply Filter</button>
+</form>
+
+
+      </div>
+    </div>
+
+    <!-- Categories Section -->
+    <div class="site-section site-blocks-2">
+      <div class="container">
+        <div class="row">
+          {% for category in categories %}
+        <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0">
+            <a class="block-2-item" href="{% url 'shop_by_category' category.id %}">
+                <figure class="image">
+                    <img src="{% if forloop.counter0 == 0 %}{% static 'user_assets/images/kids.jpg' %}{% elif forloop.counter0 == 1 %}{% static 'user_assets/images/birthday mn.jpg' %}
+                    {% elif forloop.counter0 == 2 %}{% static 'user_assets/images/marriage.jpg' %}{% elif forloop.counter0 == 3 %}{% static 'user_assets/images/anniversary.jpg' %}
+                    {% elif forloop.counter0 == 4 %}{% static 'user_assets/images/fruit.jpg' %}{% elif forloop.counter0 == 5 %}{% static 'user_assets/images/fondant.jpg' %}
+                    {% elif forloop.counter0 == 6 %}{% static 'user_assets/images/Red velvet.jpg' %}{% else %}{% endif %}" 
+                    alt="{{ category.name }}" class="img-fluid same-size">
+                </figure>
+                <div class="text">
+                    <span class="text-uppercase">Category</span>
+                    <h3>{{ category.name }}</h3>
+                </div>
+            </a>
+        </div>
+    {% empty %}
+        <div>No categories available.</div>  {# Fallback if no categories are found #}
+    {% endfor %}
+    
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+{% endblock  %}

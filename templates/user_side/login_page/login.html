@@ -1,0 +1,375 @@
+{% load static %}
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'admin_assets\img\Starlogo.png' %}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+    <style media="screen">
+        *,
+        *:before,
+        *:after {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+       
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #ffffff;
+            padding: 15px;
+        }
+        
+        form {
+            width: 100%;
+            max-width: 370px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .background {
+            width: 100%;
+            max-width: 430px;
+            height: 500px;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            left: 50%;
+            top: 50%;
+        }
+
+        form * {
+            font-family: 'Poppins', sans-serif;
+            color: #000000;
+            letter-spacing: 0.5px;
+            outline: none;
+            border: none;
+        }
+        
+        form h3 {
+            font-size: 28px;
+            font-weight: 500;
+            line-height: 1.2;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-top: 5px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        input {
+            display: block;
+            height: 40px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 6px;
+            padding: 0 10px;
+            margin-top: 8px;
+            font-size: 14px;
+            font-weight: 300;
+            border: 1px solid rgb(128, 128, 128);
+        }
+        
+        button, .google-btn {
+            margin-top: 20px;
+            width: 100%;
+            background-color:#b52a2a;
+            color: #ffffff !important;
+            padding: 10px 0;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 7px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+        }
+
+        .google-btn {
+            background-color: #ffffff;
+            color: #757575 !important;
+            border: 1px solid #dedede;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .google-btn:hover {
+            background-color: #f5f5f5;
+        }
+
+        .google-btn img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid #dedede;
+        }
+
+        .divider span {
+            padding: 0 10px;
+            color: #757575;
+            font-size: 14px;
+        }
+
+       
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .log_logo {
+            width: 70px;
+            height: auto;
+        }
+
+        .toastify {
+            padding: 12px 20px;
+            color: white;
+            display: inline-block;
+            box-shadow: 0 3px 6px -1px rgba(0, 0, 0, 0.12);
+            background-color: #333;
+            position: fixed;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            max-width: calc(50% - 20px);
+            z-index: 2147483647;
+        }
+        
+        .toastify.on {
+            opacity: 1;
+        }
+        
+        .password-container {
+            position: relative;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #757575;
+        }
+        
+        .auth-links-container {
+            margin-top: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .signup-text {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .forgot-password-link {
+            color: #b52a2a;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+            display: inline-block;
+            padding: 5px 0;
+        }
+
+        .forgot-password-link:hover {
+            color: #8a1f1f;
+            text-decoration: underline;
+        }
+
+        .signup-link {
+            color: #b52a2a;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .signup-link:hover {
+            color: #8a1f1f;
+            text-decoration: underline;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media screen and (max-width: 480px) {
+            form {
+                padding: 15px;
+            }
+            
+            .log_logo {
+                width: 60px;
+            }
+            
+            form h3 {
+                font-size: 24px;
+            }
+            
+            label {
+                font-size: 14px;
+            }
+            
+            input {
+                height: 36px;
+            }
+            
+            button, .google-btn {
+                padding: 8px 0;
+                font-size: 15px;
+            }
+            
+            .auth-links-container {
+                gap: 8px;
+            }
+            
+            .signup-text, .forgot-password-link {
+                font-size: 13px;
+            }
+        }
+        
+        /* Toast notifications for smaller screens */
+        @media screen and (max-width: 768px) {
+            .toastify {
+                max-width: 90% !important;
+                left: 5% !important;
+                right: 5% !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <form method="post" action="{% url 'login' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}">
+        {% csrf_token %}
+        
+        <div class="logo-container">
+            <a href="{% url 'home' %}">
+                <img class="log_logo" src="{% static 'user_assets/images/logo.png' %}" alt="Logo">
+            </a>
+        </div>
+        
+        <label for="username">Username</label>
+        <input type="text" placeholder="Enter Username"  id="username" name="username">
+        
+        <label for="password">Password</label>
+        <div class="password-container">
+            <input type="password" placeholder="Password" id="password" name="pass">
+            <i class="fas fa-eye toggle-password" id="togglePassword"></i>
+        </div>
+        
+        {% if request.GET.next %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+        {% endif %}
+        
+        <button type="submit">Login</button>
+        
+        <div class="divider">
+            <span>OR</span>
+        </div>
+        
+        <a href="{% provider_login_url 'google' %}?next=/" class="google-btn">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google logo">
+            Sign in with Google
+        </a>
+        
+        <button type="submit" name="demo_login" value="1" formnovalidate>Guest User</button>        
+        <div class="auth-links-container">
+            <div class="signup-text">
+                Don't have an account? <a href="{% url 'SignupPage' %}" class="signup-link">Sign up</a>
+            </div>
+            <a href="{% url 'forgot_password' %}" class="forgot-password-link">Forgot your password?</a>
+        </div>
+    </form>
+                      
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+    
+            function togglePasswordVisibility() {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    togglePassword.classList.remove('fa-eye');
+                    togglePassword.classList.add('fa-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    togglePassword.classList.remove('fa-eye-slash');
+                    togglePassword.classList.add('fa-eye');
+                }
+            }
+    
+            togglePassword.addEventListener('click', togglePasswordVisibility);
+        });
+    
+        function showToast(message, type) {
+            let backgroundColor = "#000";
+            switch(type) {
+                case 'success':
+                    backgroundColor = "#28a745";
+                    break;
+                case 'error':
+                    backgroundColor = "#dc3545";
+                    break;
+                case 'warning':
+                    backgroundColor = "#ffc107";
+                    break;
+                case 'info':
+                    backgroundColor = "#17a2b8";
+                    break;
+            }
+        
+            Toastify({
+                text: message,
+                duration: 3000,
+                gravity: "top",
+                position: window.innerWidth <= 768 ? "center" : "right",
+                style: {
+                    background: backgroundColor,
+                },
+            }).showToast();
+        }
+      
+        // For Django messages
+        {% if messages %}
+            {% for message in messages %}
+                showToast("{{ message }}", "{{ message.tags }}");
+            {% endfor %}
+        {% endif %}
+    </script>
+</body>
+</html>

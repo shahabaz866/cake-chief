@@ -1,0 +1,265 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>OTP Verification</title>
+    <link rel="icon" type="image/png" href="{% static 'admin_assets/img/Starlogo.png' %}">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    
+    <style media="screen">
+        *, *:before, *:after {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #ffffff;
+        }
+
+        .background {
+            width: 430px;
+            height: 520px;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            left: 50%;
+            top: 50%;
+        }
+
+        form {
+            height: 520px;
+            width: 400px;
+            background-color: rgba(255, 255, 255, 0.7);
+            position: absolute;
+            transform: translate(-50%, -50%);
+            top: 50%;
+            left: 50%;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 3px solid#b52a2a;
+            padding: 10px 35px;
+        }
+
+        form * {
+            font-family: 'Poppins', sans-serif;
+            color: #000000;
+            letter-spacing: 0.5px;
+            outline: none;
+            border: none;
+        }
+
+        form h3 {
+            font-size: 32px;
+            font-weight: 500;
+            line-height: 42px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 30px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        input {
+            display: block;
+            height: 50px;
+            width: 100%;
+            background-color: rgb(255, 255, 255);
+            border-radius: 6px;
+            padding: 0 10px;
+            margin-top: 8px;
+            font-size: 14px;
+            font-weight: 300;
+            border-color: #676464;
+            border-style: solid;
+        }
+
+        button {
+            margin-top: 30px;
+            width: 100%;
+            background-color:#b52a2a;
+            color: #ffffff;
+            padding: 15px 0;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        button#resendOtpButton {
+            margin-top: 10px;
+            background-color: transparent;
+            color:#b52a2a;
+            border: 2px solid#b52a2a;
+        }
+
+        button#resendOtpButton:hover {
+            background-color:#b52a2a;
+            color: white;
+        }
+
+        #msg {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+            margin-bottom: -10px;
+        }
+
+        .log_logo {
+            width: 100px;
+            height: auto;
+        }
+
+        .modal-content {
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 2px solid#b52a2a;
+        }
+
+        .modal-header {
+            border-bottom: 1px solid#b52a2a;
+        }
+
+        .modal-body .alert {
+            margin-bottom: 10px;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+        }
+
+        #timerDisplay {
+            text-align: center;
+            margin-top: 10px;
+            color: #676464;
+            font-size: 14px;
+        }
+        .toastify {
+            padding: 12px 20px;
+            color: white;
+            display: inline-block;
+            box-shadow: 0 3px 6px -1px rgba(0, 0, 0, 0.12);
+            background-color: #333;
+            position: fixed;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            max-width: calc(50% - 20px);
+            z-index: 2147483647;
+          }
+          
+          .toastify.on {
+            opacity: 1;
+          }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Changed the form action to verify_otp -->
+        <form method="post" action="{% url 'verify_otp' %}">
+            {% csrf_token %}
+            <div class="logo-container">
+                <img class="log_logo" src="{% static 'user_assets/images/logo.png' %}" alt="Logo">
+            </div>
+            <h3>OTP Verification</h3>
+            <label for="email">Email</label>
+            <input readonly type="email" placeholder="email" id="email" name="email" value="{{ email }}">
+            <label for="otp">OTP</label>
+            <!-- Added name attribute to make it work with request.POST -->
+            <input type="number" placeholder="Enter OTP" id="otp" name="otp" required>
+
+            <button type="submit">Verify</button>
+            
+            <!-- Changed the resend OTP button to use the correct URL -->
+            <button type="button" id="resendOtpButton" style="display: none;" 
+                    onclick="window.location.href='{% url 'resend_otp' %}'">
+                Resend OTP
+            </button>
+            
+            <p id="timerDisplay">You can resend the OTP in <span id="countdown">30</span> seconds.</p>
+            
+            <p style="text-align: center; margin-top: 10px;">
+                Don't you receive the OTP? <a href="{% url 'SignupPage' %}" style="color:#b52a2a;">Sign up</a>
+            </p>
+        </form>
+    </div>
+
+    <!-- Scripts section -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var countdownDuration = 30; // Changed to match your view's timeout
+            var countdownDisplay = document.getElementById('countdown');
+            var resendOtpButton = document.getElementById('resendOtpButton');
+            var timerDisplay = document.getElementById('timerDisplay');
+        
+            function updateCountdown() {
+                countdownDisplay.textContent = countdownDuration;
+                if (countdownDuration <= 0) {
+                    clearInterval(countdownInterval);
+                    timerDisplay.style.display = 'none';
+                    resendOtpButton.style.display = 'block';
+                }
+                countdownDuration--;
+            }
+        
+            // Start countdown immediately
+            updateCountdown();
+            var countdownInterval = setInterval(updateCountdown, 1000);
+        });
+
+        // Toast notification function
+        function showToast(message, type) {
+            let backgroundColor = "#000";
+            switch(type) {
+                case 'success':
+                    backgroundColor = "#0BDA51"; 
+                    break;
+                case 'error':
+                    backgroundColor = "#D33C3C";
+                    break;
+                case 'warning':
+                    backgroundColor = "#FFB347"; 
+                    break;
+                case 'info':
+                    backgroundColor = "#9B6A6C";
+                    break;
+            }
+        
+            Toastify({
+                text: message,
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                style: {
+                    background: backgroundColor,
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                    borderRadius: "8px",
+                    fontWeight: "500",
+                },
+            }).showToast();
+        }
+        
+        // Display Django messages as toasts
+        {% if messages %}
+            {% for message in messages %}
+                showToast("{{ message }}", "{{ message.tags }}");
+            {% endfor %}
+        {% endif %}
+    </script>
+</body>
+</html>
