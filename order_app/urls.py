@@ -24,6 +24,7 @@ urlpatterns = [
     path('order/<int:order_id>/invoice/', views.generate_invoice, name='generate_invoice'),
     # path('cancel_order/', views.cancel_view, name='cancel_order'),
     path('track_order/', views.track_order, name='track_order'),
+
     re_path(r'^.*$', catch_all_view),
 
 

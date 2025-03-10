@@ -580,8 +580,7 @@
                 id="mainImage"
                 src="{{ product.image.url }}"
                 alt="{{ product.title }}"
-                class="main-image img-fluid"
-              />
+                class="main-image img-fluid"/>
               <div id="myresult" class="img-zoom-result"></div>
             </div>
           </div>
@@ -590,8 +589,7 @@
           <div class="thumbnail-navigation mt-3">
             <button
               class="nav-button prev-button"
-              onclick="slideImages('prev')"
-            >
+              onclick="slideImages('prev')">
               <i class="fas fa-chevron-left"></i>
             </button>
 
@@ -599,21 +597,13 @@
               <div class="thumbnails-wrapper">
                 <!-- Main Product Image Thumbnail -->
                 <div class="thumbnail-item active">
-                  <img
-                    src="{{ product.image.url }}"
-                    alt="{{ product.title }}"
-                    onclick="changeMainImage('{{ product.image.url }}', this)"
-                  />
+                  <img src="{{ product.image.url }}" alt="{{ product.title }}" onclick="changeMainImage('{{ product.image.url }}', this)" />
                 </div>
 
                 <!-- Additional Images Thumbnails -->
                 {% for imag in aditional_img %}
                 <div class="thumbnail-item">
-                  <img
-                    src="{{ imag.image.url }}"
-                    alt="Additional image for {{ product.title }}"
-                    onclick="changeMainImage('{{ imag.image.url }}', this)"
-                  />
+                  <img src="{{ imag.image.url }}" alt="Additional image for {{ product.title }}" onclick="changeMainImage('{{ imag.image.url }}', this)" />
                 </div>
                 {% endfor %}
               </div>

@@ -18,6 +18,12 @@ from django.template.loader import render_to_string
 from django.http import HttpResponse
 from weasyprint import HTML
 import tempfile
+from django.http import JsonResponse
+from django.utils import timezone
+from datetime import timedelta
+from django.views.decorators.http import require_POST
+from django.core.exceptions import ObjectDoesNotExist
+
 
 
 
@@ -398,7 +404,7 @@ def track_order(request):
             order = None
             order_id = request.GET.get('order_id')
             
-            if order_id and order_id.isdigit():  # ✅ Check if order_id is numeric
+            if order_id and order_id.isdigit():  
                 order_id = int(order_id) 
                 try:
                     if request.user.is_authenticated:
@@ -422,3 +428,6 @@ def track_order(request):
             return render(request, 'user_side/error/error_page.html', {'error_code': 500}, status=500)
     
     
+
+
+
