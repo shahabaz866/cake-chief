@@ -357,27 +357,6 @@ def admin_order_detail(request, order_id):
 
 
 
-# def update_order_status(request):
-#     if request.method == 'POST':
-#         order_id = request.POST.get('order_id')
-#         new_status = request.POST.get('new_order_status')
-
-#         if not new_status: 
-#             messages.error(request, "Order status cannot be empty.")
-#             return redirect('order_app:admin_order_list')
-
-#         order = get_object_or_404(Order, id=order_id)
-#         order.order_status = new_status
-
-#         if new_status == 'CANCELLED' and order.payment_method in ['PayPal', 'Wallet']:
-#             order.payment_status = 'Refunded'
-
-#         order.save()
-#         messages.success(request, "Order status updated successfully.")
-
-#     return redirect('order_app:admin_order_list')
-
-
 @login_required(login_url='login')
 def delete_order(request, order_id):
     try:        
