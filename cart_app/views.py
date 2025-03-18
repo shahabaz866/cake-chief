@@ -83,7 +83,7 @@ def add_to_cart(request, id):
             if request.method == 'POST':
                 product = get_object_or_404(Product, id=id)
                 cart, _ = Cart.objects.get_or_create(user=request.user)
-
+                
                 variant_id = request.POST.get('variant')
                 
                 if not variant_id:
