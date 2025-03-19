@@ -80,6 +80,14 @@
     /* Add a subtle shadow for depth */
     .cake-chief-heading {
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }\
+    .cropper-container {
+        max-width: 100%;
+        margin: 20px 0;
+    }
+    .preview-container {
+        margin-top: 10px;
+        max-width: 200px;
     }
 </style>
 
@@ -92,10 +100,8 @@
     <link rel="stylesheet" href="{% static 'admin_assets/plugins/fontawesome/css/fontawesome.min.css' %}">
     <link rel="stylesheet" href="{% static 'admin_assets/plugins/fontawesome/css/all.min.css' %}">
     <link rel="stylesheet" href="{% static 'admin_assets/css/style.css' %}">
-    <link href="https://unpkg.com/cropperjs/dist/cropper.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
-    {% comment %} <link rel="stylesheet" href="path/to/cropper.css"> {% endcomment %}
-    <link rel="stylesheet" href="{% static 'path/to/cropper.css' %}">
+    <link rel="stylesheet" href="{% static 'admin_assets/css/cropper.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 
 
 
@@ -377,8 +383,11 @@
                                         <div id="additionalImageInputs" class="d-flex flex-wrap">
                                             {% for i in 3|range %}
                                             <div class="image-upload me-2">
-                                                <input type="file" name="additional_product_image_{{i}}" id="additionalImageInput{{i}}" 
-                                                        accept="image/*" class="form-control" required onchange="previewImage(this, {{i}})">
+                                                <input type="file" name="additional_product_image_{{i}}" 
+       id="additionalImageInput{{i}}" 
+       accept="image/*" class="form-control" 
+       required onchange="previewImage(this, {{i}})">
+
                                                 <div class="image-uploads">
                                                     <img src="{% static 'admin_assets/img/icons/upload.svg' %}" alt="img" style="width: 40px; height: auto;">
                                                     <h4>Drag and drop files to upload</h4>
@@ -406,6 +415,18 @@
         </div>
     </div>
 
+    <script src="{% static 'admin_assets/js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'admin_assets/js/feather.min.js' %}"></script>
+    <script src="{% static 'admin_assets/js/jquery.slimscroll.min.js' %}"></script>
+    <script src="{% static 'admin_assets/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'admin_assets/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'admin_assets/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'admin_assets/plugins/select2/js/select2.min.js' %}"></script>
+    <script src="{% static 'admin_assets/js/moment.min.js' %}"></script>
+    <script src="{% static 'admin_assets/js/bootstrap-datetimepicker.min.js' %}"></script>
+    <script src="{% static 'admin_assets/js/script.js' %}"></script>
+    <script src="https://unpkg.com/cropperjs/dist/cropper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
     <script>
 const IMAGE_CONFIG = {
     main: {
@@ -475,18 +496,27 @@ class ImageUploadHandler {
             alert('Please upload an image file');
             return;
         }
-
+    
         if (file.size > 5 * 1024 * 1024) {
             alert('Image size should be less than 5MB');
             return;
         }
-
+    
         const reader = new FileReader();
         reader.onload = (e) => {
+            this.previewImage(e.target.result, config.previewId);
             this.initCropper(e.target.result, type, config);
         };
         reader.readAsDataURL(file);
     }
+    
+    previewImage(imageData, previewId) {
+        let previewContainer = document.getElementById(previewId);
+        if (previewContainer) {
+            previewContainer.innerHTML = `<img src="${imageData}" style="width:100%; max-height: 200px; object-fit: cover;">`;
+        }
+    }
+    
 
     initCropper(imageData, type, config) {
         const cropContainer = document.getElementById(config.cropContainerId);
@@ -527,6 +557,7 @@ class ImageUploadHandler {
     }
 
     processCroppedImage(cropper, type, config) {
+        console.log('cropper is working');
         const canvas = cropper.getCroppedCanvas({
             width: IMAGE_CONFIG[type].width,
             height: IMAGE_CONFIG[type].height
@@ -662,17 +693,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
 
 
-        <script src="{% static 'admin_assets/js/jquery-3.6.0.min.js' %}"></script>
-        <script src="{% static 'admin_assets/js/feather.min.js' %}"></script>
-        <script src="{% static 'admin_assets/js/jquery.slimscroll.min.js' %}"></script>
-        <script src="{% static 'admin_assets/js/jquery.dataTables.min.js' %}"></script>
-        <script src="{% static 'admin_assets/js/dataTables.bootstrap4.min.js' %}"></script>
-        <script src="{% static 'admin_assets/js/bootstrap.bundle.min.js' %}"></script>
-        <script src="{% static 'admin_assets/plugins/select2/js/select2.min.js' %}"></script>
-        <script src="{% static 'admin_assets/js/moment.min.js' %}"></script>
-        <script src="{% static 'admin_assets/js/bootstrap-datetimepicker.min.js' %}"></script>
-        <script src="{% static 'admin_assets/js/script.js' %}"></script>
-        <script src="https://unpkg.com/cropperjs/dist/cropper.js"></script>
 
 
 </body>

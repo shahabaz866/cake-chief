@@ -296,6 +296,7 @@ def product_list(request):
 @user_passes_test(lambda u: u.is_superuser, login_url='home:login')
 def add_products(request):
     try:        
+            print("=====",request)
             title = stock = description = price = None
             category_id = flavour_id = None
             selected_sizes = []
