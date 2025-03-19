@@ -138,7 +138,10 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATIC_URL = '/static/'
+STATIC_URL = env('STATIC_URL')
+
+SECURE_SSL_REDIRECT = env.bool('SECURE_SSL_REDIRECT', default=True)  
+SESSION_COOKIE_SECURE = env.bool('SESSION_COOKIE_SECURE', default=True)
 
 STATICFILES_DIRS = [
     BASE_DIR.joinpath('static'),
