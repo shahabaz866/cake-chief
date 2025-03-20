@@ -84,9 +84,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'cake_chief.wsgi.application'
 
 ISPRODUCTION = env.bool('ISPRODUCTION')
-print(f"ISPRODUCTION: {ISPRODUCTION}") 
+# print(f"ISPRODUCTION: {ISPRODUCTION}") 
 if ISPRODUCTION:
-    print("Using PostgreSQL...")  # ✅ Debugging line
+    # print("Using PostgreSQL...")  # ✅ Debugging line
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -98,7 +98,7 @@ if ISPRODUCTION:
         }
     }
 else:
-  print("Using SQLite...")
+#   print("Using SQLite...")
   DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
